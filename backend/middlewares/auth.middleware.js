@@ -1,15 +1,15 @@
 import jwt from "jsonwebtoken";
 
 function verifyToken(req, res, next) {
-  const token = req.header("Authorization");
-  if (!token) return res.status(401).json({ success: false, error: "Access denied" });
+  const token = req.headers.authorization?.split(" ")?.[1];
+  if (!token) return res.status(401).json({ ok: false, error: "Access denied" });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.userId;
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    req.user = decoded;
     next();
-  } catch (error) {
-    res.status(401).json({ success: false, error: "Invalid token" });
+  } catch (e) {
+    res.status(401).json({ ok: false, error: "Invalid token" });
   }
 }
 
