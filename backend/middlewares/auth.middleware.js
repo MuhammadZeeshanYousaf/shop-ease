@@ -9,7 +9,7 @@ function verifyToken(req, res, next) {
     req.user = decoded;
     next();
   } catch (e) {
-    res.status(401).json({ ok: false, error: "Invalid token" });
+    res.status(403).json({ ok: false, message: "Token invalid" });
   }
 }
 

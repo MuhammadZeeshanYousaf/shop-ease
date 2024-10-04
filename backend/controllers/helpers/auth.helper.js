@@ -42,6 +42,6 @@ export const generateRefreshToken = async user => {
 // Extract refresh_token from cookies
 export const cookieRefreshToken = headers => {
   const cookies = headers["set-cookie"]?.[0]?.split("=") ?? [];
-  const refreshTokenExist = cookies.find(c => c === "refresh_token");
+  const refreshTokenExist = cookies.find(c => c === "jwt");
   return cookies[cookies.indexOf(refreshTokenExist) + 1];
 };
