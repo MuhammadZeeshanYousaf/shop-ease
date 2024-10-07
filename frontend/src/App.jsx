@@ -7,6 +7,7 @@ import Auth from "./components/Auth.jsx";
 import SellerPages from "./pages/seller/index.jsx";
 import CustomerPages from "./pages/customer/index.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
+import Register from "./pages/Register.jsx";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
           {/* User section layout */}
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
-            <Route path="login" element={<Login />} />
+            <Route path="login/:role" element={<Login />} />
+            <Route path="register/:role" element={<Register />} />
           </Route>
 
           {/* Authenticated Routes */}

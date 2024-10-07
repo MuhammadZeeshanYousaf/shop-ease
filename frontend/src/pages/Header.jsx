@@ -1,14 +1,36 @@
 import { useState } from "react";
 import logo from "../assets/images/logo.png";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import api from "../utils/api";
 
 const Navbar = () => {
+  const { user, setUser, setUserToken } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
 
   const handleSearch = () => {
     console.log("Searching for:", searchTerm);
+  };
+
+  const logoutUser = () => {
+    if (user) {
+      api
+        .delete("/logout")
+        .then(res => {
+          if (res.data.ok) {
+            setUserToken(null);
+            setUser(null);
+            console.log("Logged out successfully");
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch(e => {
+          console.error(e.response.data.message || e.message);
+        });
+    }
   };
 
   const handleLoginDropdownToggle = () => {
@@ -55,24 +77,42 @@ const Navbar = () => {
                 </span>
               )}
             </button>
-            <button
-              onClick={handleLoginDropdownToggle}
-              className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 rounded-lg"
-            >
-              &ensp;&ensp;Login&ensp;&ensp;
-              {isLoginDropdownOpen && (
-                <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-16 right-auto">
-                  <ul>
-                    <li className="py-2 hover:text-purple-500">
-                      <Link to="/login">Login</Link>
-                    </li>
-                    <li className="py-2 hover:text-purple-500">
-                      <Link to="/register">Register</Link>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </button>
+            {user ? (
+              <button
+                onClick={handleLoginDropdownToggle}
+                className="bg-gray-800 hover:bg-gray-600 text-white py-2 font-bold rounded-lg"
+              >
+                &ensp;&ensp;{user.firstName}&ensp;<i className="fa fa-chevron-down"></i>&ensp;&ensp;
+                {isLoginDropdownOpen && (
+                  <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
+                    <ul>
+                      <li className="py-2 hover:text-purple-500">
+                        <Link onClick={logoutUser}>Logout</Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </button>
+            ) : (
+              <button
+                onClick={handleLoginDropdownToggle}
+                className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 rounded-lg"
+              >
+                &ensp;&ensp;Login&ensp;&ensp;
+                {isLoginDropdownOpen && (
+                  <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
+                    <ul>
+                      <li className="py-2 hover:text-purple-500">
+                        <Link to="/login/customer">Customer</Link>
+                      </li>
+                      <li className="py-2 hover:text-purple-500">
+                        <Link to="/login/seller">Seller</Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </nav>

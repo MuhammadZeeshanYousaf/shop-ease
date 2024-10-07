@@ -2,12 +2,13 @@ import { useState } from "react";
 import logo from "../assets/images/logo.png";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
-import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function Login() {
-  const { setUserToken, setUser } = useAuth();
+  const { setUserToken } = useAuth();
   const navigate = useNavigate();
+  // const [queryParams] = useSearchParams();
+  const { role } = useParams();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,10 +21,8 @@ export default function Login() {
       .post("/login", { email, password })
       .then(res => {
         if (res.data.ok && res.data.token) {
-          const userPayload = jwtDecode(res.data.token);
           setUserToken(res.data.token);
-          setUser(userPayload);
-          navigate(`/${userPayload.role}/profile`);
+          navigate(`/`);
         } else {
           alert(res.data.message);
         }
@@ -107,7 +106,7 @@ export default function Login() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{" "}
-            <Link to="/register" className="font-semibold leading-6 text-purple-600 hover:text-purple-500">
+            <Link to={`/register/${role}`} className="font-semibold leading-6 text-purple-600 hover:text-purple-500">
               Register
             </Link>
           </p>
