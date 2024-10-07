@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Error from "../pages/Error";
+import ErrorPage from "../pages/ErrorPage";
 import api from "../utils/api";
 import { useEffect, useRef } from "react";
 
@@ -36,7 +36,7 @@ const Auth = ({ type }) => {
   if (!user) {
     return <h2 className="text-center">Loading...</h2>;
   } else {
-    return user.role !== type ? <Error code={401} message="You are not authorized to access this page!" /> : <Outlet />;
+    return user.role !== type ? <ErrorPage code={401} message="You are not authorized to access this page!" /> : <Outlet />;
   }
 };
 

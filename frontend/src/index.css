@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.slick-arrow.slick-prev::before {
+  position: absolute;
+  left: 30px;
+  z-index: 1;
+}
+
+.slick-arrow.slick-next::before {
+  position: absolute;
+  right: 30px;
+  z-index: 1;
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

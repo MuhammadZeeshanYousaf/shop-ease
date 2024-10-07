@@ -1,19 +1,23 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.jsx";
+import Layout from "./pages/Layout.jsx";
 import Login from "./pages/Login.jsx";
 import { AuthProvider } from "./context/AuthContext";
 import Auth from "./components/Auth.jsx";
 import SellerPages from "./pages/seller/index.jsx";
 import CustomerPages from "./pages/customer/index.jsx";
-import Error from "./pages/Error.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <Routes>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
+          {/* User section layout */}
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="login" element={<Login />} />
+          </Route>
 
           {/* Authenticated Routes */}
           <Route path="customer" element={<Auth type="customer" />}>
@@ -23,7 +27,9 @@ function App() {
             <Route path="*" element={<SellerPages />} />
           </Route>
 
-          <Route path="*" element={<Error code={404} message="Page not found" />} />
+          <Route path="/" element={<Layout />}>
+            <Route path="*" element={<ErrorPage code={404} message="Page not found" />} />
+          </Route>
         </Routes>
       </Router>
     </AuthProvider>
