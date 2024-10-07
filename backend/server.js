@@ -17,13 +17,16 @@ app.use(logger("dev"));
 app.use(express.json()); // allows us to accept JSON data in the req.body
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// app.use(
-//   cors({
-//     // credentials: true,
-//     // origin: "*", // process.env.FRONTEND_URL ?? "http://localhost:3000",
-//     optionsSuccessStatus: 406,
-//   })
-// );
+const corsOptions = {
+  origin: process.env.FRONTEND_URL, // Allow requests from this origin
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed methods
+  credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  optionsSuccessStatus: 200,
+};
+// Apply CORS middleware
+app.use(cors(corsOptions));
+// Handle preflight OPTIONS request for all routes
+app.options("*", cors(corsOptions)); // This responds to OPTIONS requests
 app.use("/api", authRoutes);
 // Protected routes
 app.use("/api/products", productRoutes);

@@ -9,8 +9,8 @@ import Error from "./pages/Error.jsx";
 
 function App() {
   return (
-    <Router>
-      <AuthProvider>
+    <AuthProvider>
+      <Router>
         <Routes>
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
@@ -25,8 +25,8 @@ function App() {
 
           <Route path="*" element={<Error code={404} message="Page not found" />} />
         </Routes>
-      </AuthProvider>
-    </Router>
+      </Router>
+    </AuthProvider>
   );
 }
 

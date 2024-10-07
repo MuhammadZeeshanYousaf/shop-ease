@@ -1,5 +1,6 @@
 import { createContext, useContext, useLayoutEffect, useState } from "react";
 import api from "../utils/api";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext(undefined);
 
@@ -12,6 +13,7 @@ const AuthProvider = ({ children }) => {
       config.headers.Authorization = !config._retry && userToken ? `Bearer ${userToken}` : config.headers.Authorization;
       return config;
     });
+    userToken && setUser(jwtDecode(userToken));
 
     return () => {
       api.interceptors.request.eject(authInterceptor);
@@ -20,7 +22,7 @@ const AuthProvider = ({ children }) => {
 
   useLayoutEffect(() => {
     const refreshInterceptor = api.interceptors.response.use(
-      response => response.data,
+      response => response,
       async error => {
         const originalReq = error.config;
 

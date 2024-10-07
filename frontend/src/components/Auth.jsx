@@ -1,22 +1,43 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { jwtDecode } from "jwt-decode";
 import Error from "../pages/Error";
+import api from "../utils/api";
+import { useEffect, useRef } from "react";
 
 const Auth = ({ type }) => {
-  const { userToken, setUser } = useAuth();
+  const { setUserToken, userToken, user } = useAuth();
+  const navigate = useNavigate();
+  const tokenChecked = useRef(false);
 
-  if (!userToken) {
-    // If the user is not authenticated, redirect to the login page
-    return <Navigate to="/login" />;
+  const refreshTheToken = async () => {
+    try {
+      const res = await api.get("/refresh");
+      return res.data.token;
+    } catch {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const checkToken = async () => {
+      // If tokenChecked is true, don't call the API again
+      if (!userToken && !tokenChecked.current) {
+        tokenChecked.current = true;
+        // tries refreshing
+        const token = await refreshTheToken();
+        if (token) setUserToken(token);
+        else navigate("/login");
+      }
+    };
+
+    checkToken();
+  }, []);
+
+  if (!user) {
+    return <h2 className="text-center">Loading...</h2>;
+  } else {
+    return user.role !== type ? <Error code={401} message="You are not authorized to access this page!" /> : <Outlet />;
   }
-
-  const loggedUser = jwtDecode(userToken);
-  setUser(loggedUser);
-  if (loggedUser.role !== type) return <Error code={401} message="You are not authorized to access this page!" />;
-
-  // If the user is authenticated, render the children (protected component)
-  return <Outlet />;
 };
 
 export default Auth;

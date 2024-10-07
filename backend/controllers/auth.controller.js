@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
-import { cookieRefreshToken, generateAccessToken, generateRefreshToken } from "./helpers/auth.helper.js";
+import { generateAccessToken, generateRefreshToken } from "./helpers/auth.helper.js";
 import RefreshToken from "../models/refreshToken.model.js";
 
 // User Register
@@ -65,9 +65,7 @@ export const loginUser = async (req, res) => {
 // User Refresh access/bearer token
 export const refreshAccessToken = async (req, res) => {
   try {
-    const refreshToken = cookieRefreshToken(req.headers);
-    console.log("Refresh Req: Cookies:: ", req.cookie, req.cookies);
-    console.log("Signed Cookies: ", req.signedCookies);
+    const refreshToken = req.cookies.jwt;
 
     if (!refreshToken) {
       return res.status(400).json({ ok: false, message: "Refresh token is required" });
@@ -99,7 +97,7 @@ export const refreshAccessToken = async (req, res) => {
 
 // User logout
 export const logoutUser = async (req, res) => {
-  const refreshToken = cookieRefreshToken(req.headers);
+  const refreshToken = req.cookies.jwt;
 
   if (!refreshToken) {
     return res.status(400).json({ ok: false, message: "Refresh token is required" });
