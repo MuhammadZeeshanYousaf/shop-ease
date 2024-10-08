@@ -1,0 +1,17 @@
+.slick-arrow {
+  &.slick-prev {
+    &::before {
+      // position: absolute;
+      left: 30px;
+      z-index: 1;
+    }
+  }
+
+  &.slick-next {
+    &::before {
+      position: absolute;
+      right: 30px;
+      z-index: 1;
+    }
+  }
+}

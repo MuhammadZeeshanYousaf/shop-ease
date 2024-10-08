@@ -50,13 +50,13 @@ const Home = () => {
         </Slider>
       </div>
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Categories</h2>
+        <h2 className="text-2xl font-bold mb-4 border-b-2 border-fuchsia-200 text-fuchsia-950">Categories</h2>
         <div className="flex flex-wrap justify-center">
           {categories.map(category => (
             <div key={category.id} className="w-1/2 md:w-1/3 lg:w-1/5 p-4">
               <img src={category.image} alt={category.name} className="w-full h-48 object-cover" />
               <h3 className="text-lg font-bold mt-4">{category.name}</h3>
-              <button className="mt-3 flex w-full justify-center rounded-md bg-purple-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600">
+              <button className="btn btn-gradient mt-3 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-fuchsia-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-600">
                 View products
               </button>
             </div>
@@ -64,7 +64,7 @@ const Home = () => {
         </div>
       </div>
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">Hot products</h2>
+        <h2 className="text-2xl text-fuchsia-950 font-bold mb-4 border-b-2 border-fuchsia-200">Hot products</h2>
         <div className="flex flex-wrap justify-center">
           {hotProducts.map(product => (
             <div key={product.id} className="w-1/2 md:w-1/3 lg:w-1/3 p-4">

@@ -1,0 +1,21 @@
+@use "./assets/stylesheets/custom_slick";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+$font-stack: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+body {
+  font-family: $font-stack;
+}
+
+@layer components {
+  .btn {
+    @apply bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-4 rounded-lg;
+
+    &.btn-gradient {
+      @apply bg-gradient-to-r from-fuchsia-500 via-violet-500 to-indigo-500;
+    }
+  }
+
+}

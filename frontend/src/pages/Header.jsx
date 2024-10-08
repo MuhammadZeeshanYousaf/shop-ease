@@ -50,7 +50,7 @@ const Navbar = () => {
             <img src={logo} alt="Logo" className="h-12 w-12 mr-4" />
             <span className="text-lg font-bold select-none ">ShopEase</span>
           </Link>
-          <div className="flex items-center">
+          <div className="flex items-center gap-x-3">
             <input
               type="search"
               value={searchTerm}
@@ -60,19 +60,19 @@ const Navbar = () => {
             />
             <button
               onClick={handleSearch}
-              className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg ml-2"
+              className="btn"
             >
               <i className="fa fa-search"></i> Search
             </button>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center gap-x-2">
             <button
               onClick={handleCartIconClick}
-              className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full ml-4 relative text-2xl"
+              className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full ml-4 relative"
             >
-              <i className="fa fa-shopping-cart"></i>
+              <span className="text-2xl"><i className="fa fa-shopping-cart"></i></span>
               {cartItemCount > 0 && (
-                <span className="absolute top-0 right-0 bg-purple-500 text-white font-bold py-1 px-2 rounded-full">
+                <span className="absolute top-0 right-0 bg-fuchsia-500 text-white font-bold py-0.5 px-2 rounded-full text-xs">
                   {cartItemCount}
                 </span>
               )}
@@ -86,7 +86,7 @@ const Navbar = () => {
                 {isLoginDropdownOpen && (
                   <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
                     <ul>
-                      <li className="py-2 hover:text-purple-500">
+                      <li className="py-2 hover:text-fuchsia-500">
                         <Link onClick={logoutUser}>Logout</Link>
                       </li>
                     </ul>
@@ -102,10 +102,10 @@ const Navbar = () => {
                 {isLoginDropdownOpen && (
                   <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
                     <ul>
-                      <li className="py-2 hover:text-purple-500">
+                      <li className="py-2 hover:text-fuchsia-500">
                         <Link to="/login/customer">Customer</Link>
                       </li>
-                      <li className="py-2 hover:text-purple-500">
+                      <li className="py-2 hover:text-fuchsia-500">
                         <Link to="/login/seller">Seller</Link>
                       </li>
                     </ul>
