@@ -5,8 +5,16 @@
 
 $font-stack: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: $font-stack;
+}
+
+a {
+  display: inline-block;
 }
 
 @layer components {
@@ -17,5 +25,7 @@ body {
       @apply bg-gradient-to-r from-fuchsia-500 via-violet-500 to-indigo-500;
     }
   }
-
+  .adjust-toast {
+    top: 101px !important;
+  }
 }

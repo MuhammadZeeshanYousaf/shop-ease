@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-function verifyToken(req, res, next) {
+export function verifyToken(req, res, next) {
   const token = req.headers.authorization?.split(" ")?.[1];
   if (!token) return res.status(401).json({ ok: false, error: "Access denied" });
 
@@ -13,4 +13,14 @@ function verifyToken(req, res, next) {
   }
 }
 
-export default verifyToken;
+export function authorize(role) {
+  return (req, res, next) => {
+    if (!req.user) throw new Error("Authorization must be called after token verification!");
+    if (req.user?.role === role) {
+      next();
+    } else {
+      res.status(401).json({ ok: false, message: "Unauthorized" });
+    }
+  };
+}
+

@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../utils/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { capitalize } from "../utils/helpers";
 
 const Register = () => {
   const { signInUser } = useAuth();
@@ -21,11 +22,6 @@ const Register = () => {
     const { name, value } = event.target;
     setFormState(prevFormState => ({ ...prevFormState, [name]: value }));
   };
-
-  function capitalize(str) {
-    if (!str) return "";
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  }
 
   const handleSubmit = event => {
     event.preventDefault();

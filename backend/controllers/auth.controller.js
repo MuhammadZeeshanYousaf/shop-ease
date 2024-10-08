@@ -34,11 +34,12 @@ export const registerUser = async (req, res) => {
 // User login
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
+
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(401).json({ ok: false, message: "Authentication failed" });
-    }
+    if (!user) return res.status(401).json({ ok: false, message: "Authentication failed" });
+    if (role && user.role !== role)
+      return res.status(401).json({ ok: false, message: "Credentials are incorrect for " + role });
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(401).json({ ok: false, message: "Email or Password is incorrect" });
@@ -56,7 +57,7 @@ export const loginUser = async (req, res) => {
       secure: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
-    res.status(200).json({ ok: true, token });
+    res.status(200).json({ ok: true, message: "Logged in successfully", token });
   } catch (e) {
     res.status(500).json({ ok: false, message: `Login failed: ${e.message}` });
   }
@@ -84,7 +85,7 @@ export const refreshAccessToken = async (req, res) => {
     const decodedUser = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
     const { user } = storedToken;
 
-    if (decodedUser.email === user.email && decodedUser.userId === user._id?.toString()) {
+    if (decodedUser.email === user.email && decodedUser.id === user._id?.toString()) {
       const newAccessToken = generateAccessToken(user);
       return res.status(201).json({ ok: true, token: newAccessToken });
     } else {

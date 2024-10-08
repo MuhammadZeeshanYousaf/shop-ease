@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// import { Toaster } from 'react-hot-toast';
 import Home from "./pages/Home.jsx";
 import Layout from "./pages/Layout.jsx";
 import Login from "./pages/Login.jsx";

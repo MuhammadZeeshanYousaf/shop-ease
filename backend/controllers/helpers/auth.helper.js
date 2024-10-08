@@ -4,7 +4,7 @@ import RefreshToken from "../../models/refreshToken.model.js";
 export const generateAccessToken = user => {
   return jwt.sign(
     {
-      userId: user._id,
+      id: user._id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -20,7 +20,7 @@ export const generateAccessToken = user => {
 export const generateRefreshToken = async user => {
   const refreshToken = jwt.sign(
     {
-      userId: user._id,
+      id: user._id,
       email: user.email,
     },
     process.env.JWT_REFRESH_SECRET,

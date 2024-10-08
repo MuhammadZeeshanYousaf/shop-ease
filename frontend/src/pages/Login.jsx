@@ -3,6 +3,8 @@ import logo from "../assets/images/logo.png";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
+import { capitalize } from "../utils/helpers";
 
 export default function Login() {
   const { signInUser } = useAuth();
@@ -18,18 +20,22 @@ export default function Login() {
     if (!email || !password) return;
 
     api
-      .post("/login", { email, password })
+      .post("/login", { email, password, role })
       .then(res => {
         if (res.data.ok && res.data.token) {
-          console.log(res.data.token);
           signInUser(res.data.token);
-          navigate("/");
+          toast.success(res.data.message);
+          if (role === "seller") {
+            navigate("/seller/dashboard");
+          } else {
+            navigate("/");
+          }
         } else {
-          alert(res.data.message);
+          toast(res.data.message);
         }
       })
       .catch(e => {
-        console.error("Login error:", e.response?.data?.message || e.message);
+        toast.error(e.response?.data?.message || e.message);
       });
   };
 
@@ -46,7 +52,7 @@ export default function Login() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img alt="ShopEase" src={logo} className="mx-auto h-28 w-auto" />
           <h2 className="mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+            Sign in as {capitalize(role)}
           </h2>
         </div>
 

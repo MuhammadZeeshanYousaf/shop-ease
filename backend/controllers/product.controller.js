@@ -61,3 +61,15 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ ok: false, message: "Server Error" });
   }
 };
+
+export const getMyProducts = async (req, res) => {
+  const userId = req.user.id;
+
+  try {
+    const products = await Product.find({ user: userId });
+    res.status(200).json({ ok: true, data: products });
+  } catch (error) {
+    console.log("Error in fetching products:", error.message);
+    res.status(500).json({ ok: false, message: "Server Error" });
+  }
+};

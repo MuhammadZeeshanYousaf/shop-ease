@@ -3,6 +3,7 @@ import logo from "../assets/images/logo.png";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const { user, signOutUser } = useAuth();
@@ -21,7 +22,7 @@ const Navbar = () => {
         .then(res => {
           if (res.data.ok) {
             signOutUser();
-            console.log("Logged out successfully");
+            toast.success(res.data.message);
           } else {
             alert(res.data.message);
           }
@@ -82,8 +83,23 @@ const Navbar = () => {
               >
                 &ensp;&ensp;{user.firstName}&ensp;<i className="fa fa-chevron-down"></i>&ensp;&ensp;
                 {isLoginDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
+                  <div className="absolute bg-gray-800 text-white p-2 px-4 rounded-lg top-20 right-auto">
+                    <div className="flex items-center border-b-2 py-3 border-b-black ">
+                      <img
+                        src="https://via.placeholder.com/100x100"
+                        alt="profile image"
+                        className="w-8 h-8 rounded-full"
+                      />
+                      <small className="text-slate-200 ml-2">{user.role}</small>
+                    </div>
                     <ul>
+                      {user.role === "seller" && (
+                        <li className="py-2">
+                          <Link to="seller/dashboard" className="py-2 hover:text-fuchsia-500">
+                            Dashboard
+                          </Link>
+                        </li>
+                      )}
                       <li className="py-2">
                         <Link to={`/${user.role}/profile`} className="py-2 hover:text-fuchsia-500">
                           Profile
