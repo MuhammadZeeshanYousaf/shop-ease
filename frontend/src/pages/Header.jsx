@@ -5,7 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 
 const Navbar = () => {
-  const { user, setUser, setUserToken } = useAuth();
+  const { user, signOutUser } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
@@ -20,8 +20,7 @@ const Navbar = () => {
         .delete("/logout")
         .then(res => {
           if (res.data.ok) {
-            setUserToken(null);
-            setUser(null);
+            signOutUser();
             console.log("Logged out successfully");
           } else {
             alert(res.data.message);
@@ -58,19 +57,18 @@ const Navbar = () => {
               className="py-2.5 pl-10 text-sm text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600 w-80"
               placeholder="Search products..."
             />
-            <button
-              onClick={handleSearch}
-              className="btn"
-            >
+            <button onClick={handleSearch} className="btn">
               <i className="fa fa-search"></i> Search
             </button>
           </div>
           <div className="flex items-center gap-x-2">
             <button
               onClick={handleCartIconClick}
-              className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full ml-4 relative"
+              className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded-full ml-4 relative"
             >
-              <span className="text-2xl"><i className="fa fa-shopping-cart"></i></span>
+              <span className="text-2xl">
+                <i className="fa fa-shopping-cart"></i>
+              </span>
               {cartItemCount > 0 && (
                 <span className="absolute top-0 right-0 bg-fuchsia-500 text-white font-bold py-0.5 px-2 rounded-full text-xs">
                   {cartItemCount}
@@ -86,8 +84,15 @@ const Navbar = () => {
                 {isLoginDropdownOpen && (
                   <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
                     <ul>
-                      <li className="py-2 hover:text-fuchsia-500">
-                        <Link onClick={logoutUser}>Logout</Link>
+                      <li className="py-2">
+                        <Link to={`/${user.role}/profile`} className="py-2 hover:text-fuchsia-500">
+                          Profile
+                        </Link>
+                      </li>
+                      <li className="py-2">
+                        <Link onClick={logoutUser} className="py-2 hover:text-fuchsia-500">
+                          Logout
+                        </Link>
                       </li>
                     </ul>
                   </div>
@@ -102,11 +107,15 @@ const Navbar = () => {
                 {isLoginDropdownOpen && (
                   <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
                     <ul>
-                      <li className="py-2 hover:text-fuchsia-500">
-                        <Link to="/login/customer">Customer</Link>
+                      <li className="py-2">
+                        <Link to="/login/customer" className="py-2 hover:text-fuchsia-500">
+                          Customer
+                        </Link>
                       </li>
-                      <li className="py-2 hover:text-fuchsia-500">
-                        <Link to="/login/seller">Seller</Link>
+                      <li className="py-2">
+                        <Link to="/login/seller" className="py-2 hover:text-fuchsia-500">
+                          Seller
+                        </Link>
                       </li>
                     </ul>
                   </div>

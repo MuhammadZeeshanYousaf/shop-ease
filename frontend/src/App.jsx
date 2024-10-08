@@ -3,7 +3,7 @@ import Home from "./pages/Home.jsx";
 import Layout from "./pages/Layout.jsx";
 import Login from "./pages/Login.jsx";
 import { AuthProvider } from "./context/AuthContext";
-import Auth from "./components/Auth.jsx";
+import Authenticated from "./components/Authenticated.jsx";
 import SellerPages from "./pages/seller/index.jsx";
 import CustomerPages from "./pages/customer/index.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
@@ -22,10 +22,10 @@ function App() {
           </Route>
 
           {/* Authenticated Routes */}
-          <Route path="customer" element={<Auth type="customer" />}>
+          <Route path="customer" element={<Authenticated type="customer" />}>
             <Route path="*" element={<CustomerPages />} />
           </Route>
-          <Route path="seller" element={<Auth type="seller" />}>
+          <Route path="seller" element={<Authenticated type="seller" />}>
             <Route path="*" element={<SellerPages />} />
           </Route>
 

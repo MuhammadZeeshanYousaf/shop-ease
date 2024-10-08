@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
-  const { setUserToken } = useAuth();
+  const { signInUser } = useAuth();
   const { role } = useParams();
   const [formState, setFormState] = useState({
     firstName: "",
@@ -37,7 +37,7 @@ const Register = () => {
         .post("/register", { ...formState })
         .then(res => {
           if (res.data.ok) {
-            setUserToken(res.data.token);
+            signInUser(res.data.token);
             navigate("/");
           } else {
             alert(res.data.message);

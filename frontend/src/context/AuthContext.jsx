@@ -5,20 +5,25 @@ import { jwtDecode } from "jwt-decode";
 const AuthContext = createContext(undefined);
 
 const AuthProvider = ({ children }) => {
-  const [userToken, setUserToken] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ payload: null, token: null });
 
   useLayoutEffect(() => {
+    if (!user.token && localStorage.getItem("token")) {
+      const localToken = localStorage.getItem("token");
+      setUser({ token: localToken, payload: jwtDecode(localToken) });
+    }
+
+    // set token for every api call
     const authInterceptor = api.interceptors.request.use(config => {
-      config.headers.Authorization = !config._retry && userToken ? `Bearer ${userToken}` : config.headers.Authorization;
+      config.headers.Authorization =
+        !config._retry && user.token ? `Bearer ${user.token}` : config.headers.Authorization;
       return config;
     });
-    userToken && setUser(jwtDecode(userToken));
 
     return () => {
       api.interceptors.request.eject(authInterceptor);
     };
-  }, [userToken]);
+  }, [user.token]);
 
   useLayoutEffect(() => {
     const refreshInterceptor = api.interceptors.response.use(
@@ -34,14 +39,14 @@ const AuthProvider = ({ children }) => {
           try {
             const res = await api.get("/refresh");
 
-            setUserToken(res.data.token);
+            setUser({ token: res.data.token });
 
             originalReq.headers.Authorization = `Bearer ${res.data.token}`;
             originalReq._retry = true;
 
             return api(originalReq);
           } catch {
-            setUserToken(null);
+            setUser({ token: null, payload: null });
           }
         }
 
@@ -54,7 +59,23 @@ const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  return <AuthContext.Provider value={{ userToken, setUserToken, user, setUser }}>{children}</AuthContext.Provider>;
+  function signOutUser() {
+    setUser({ token: null, payload: null });
+    localStorage.removeItem("token");
+  }
+
+  function signInUser(token) {
+    if (token) {
+      setUser({ token, payload: jwtDecode(token) });
+      localStorage.setItem("token", token);
+    } else {
+      throw new Error("Cannot sign in user without token!");
+    }
+  }
+
+  return (
+    <AuthContext.Provider value={{ signInUser, signOutUser, user: user.payload }}>{children}</AuthContext.Provider>
+  );
 };
 
 const useAuth = () => {

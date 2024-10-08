@@ -5,7 +5,7 @@ import api from "../utils/api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 export default function Login() {
-  const { setUserToken } = useAuth();
+  const { signInUser } = useAuth();
   const navigate = useNavigate();
   // const [queryParams] = useSearchParams();
   const { role } = useParams();
@@ -21,8 +21,9 @@ export default function Login() {
       .post("/login", { email, password })
       .then(res => {
         if (res.data.ok && res.data.token) {
-          setUserToken(res.data.token);
-          navigate(`/`);
+          console.log(res.data.token);
+          signInUser(res.data.token);
+          navigate("/");
         } else {
           alert(res.data.message);
         }

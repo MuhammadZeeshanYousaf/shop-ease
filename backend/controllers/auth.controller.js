@@ -52,7 +52,7 @@ export const loginUser = async (req, res) => {
     // Assigning refresh token in http-only cookie
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
-      sameSite: "None",
+      sameSite: "Lax",
       secure: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
@@ -108,6 +108,11 @@ export const logoutUser = async (req, res) => {
     const deletedToken = await RefreshToken.findOneAndDelete({ token: refreshToken });
     if (!deletedToken) throw new Error("Token Invalid");
 
+    res.clearCookie("jwt", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Lax",
+    });
     res.status(200).json({ ok: true, message: "Logged out successfully" });
   } catch (e) {
     res.status(500).json({ ok: false, message: e.message });
