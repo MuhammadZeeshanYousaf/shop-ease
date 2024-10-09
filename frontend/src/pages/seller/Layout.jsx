@@ -2,6 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { useState } from "react";
 import { capitalize } from "../../utils/helpers";
+import { Toaster } from "react-hot-toast";
 
 function Layout() {
   const location = useLocation();
@@ -93,6 +94,7 @@ function Layout() {
           <Outlet />
         </div>
       </div>
+      <Toaster position="top-center" containerClassName="adjust-toast" />
     </main>
   );
 }

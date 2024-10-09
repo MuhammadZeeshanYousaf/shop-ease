@@ -1,7 +1,8 @@
 import { useAuth } from "../../context/AuthContext";
 
 function Profile() {
-  const { user } = useAuth();
+  const { currentUser } = useAuth();
+  const user = currentUser();
 
   return (
     <div>

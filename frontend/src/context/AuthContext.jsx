@@ -73,9 +73,22 @@ const AuthProvider = ({ children }) => {
     }
   }
 
-  return (
-    <AuthContext.Provider value={{ signInUser, signOutUser, user: user.payload }}>{children}</AuthContext.Provider>
-  );
+  function currentUser() {
+    if (user.payload) {
+      return user.payload;
+    } else if (user.token) {
+      const decoded = jwtDecode(user.token);
+      setUser(prev => ({ ...prev, payload: decoded }));
+      return decoded;
+    } else if (localStorage.getItem("token")) {
+      const localToken = localStorage.getItem("token");
+      const decoded = jwtDecode(localToken);
+      setUser({ token: localToken, payload: decoded });
+      return decoded;
+    }
+  }
+
+  return <AuthContext.Provider value={{ signInUser, signOutUser, currentUser }}>{children}</AuthContext.Provider>;
 };
 
 const useAuth = () => {

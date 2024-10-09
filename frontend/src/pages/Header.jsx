@@ -6,7 +6,8 @@ import api from "../utils/api";
 import toast from "react-hot-toast";
 
 const Navbar = () => {
-  const { user, signOutUser } = useAuth();
+  const { currentUser, signOutUser } = useAuth();
+  const user = currentUser();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
   const [cartItemCount, setCartItemCount] = useState(0);
