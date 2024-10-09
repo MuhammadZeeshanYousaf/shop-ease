@@ -10,6 +10,7 @@ function Profile() {
       <br />
       <p>{user.email}</p>
       <p>{user.firstName}</p>
+      
     </div>
   );
 }

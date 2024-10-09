@@ -53,8 +53,8 @@ const Home = () => {
         <h2 className="text-2xl font-bold mb-4 border-b-2 border-fuchsia-200 text-fuchsia-950">Categories</h2>
         <div className="flex flex-wrap justify-center">
           {categories.map(category => (
-            <div key={category.id} className="w-1/2 md:w-1/3 lg:w-1/5 p-4">
-              <img src={category.image} alt={category.name} className="w-full h-48 object-cover" />
+            <div key={category.id} className="w-1/2 md:w-1/3 lg:w-1/5 p-4 shadow rounded-lg bg-gray-50">
+              <img src={category.image} alt={category.name} className="w-full h-48 object-cover rounded" />
               <h3 className="text-lg font-bold mt-4">{category.name}</h3>
               <button className="btn btn-gradient mt-3 flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-fuchsia-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-fuchsia-600">
                 View products
@@ -65,24 +65,37 @@ const Home = () => {
       </div>
       <div className="mb-8">
         <h2 className="text-2xl text-fuchsia-950 font-bold mb-4 border-b-2 border-fuchsia-200">Hot products</h2>
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center gap-10">
           {hotProducts.map(product => (
-            <div key={product.id} className="w-1/2 md:w-1/3 lg:w-1/3 p-4">
-              <div className="border rounded-lg shadow-lg overflow-hidden">
-                {/* Card Content */}
-                <div>
-                  <img src={product.image} className="w-full h-48 object-cover" />
+            <div
+              key={product._id}
+              className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden"
+            >
+              {/* Product Image */}
+              <img
+                className="w-full h-48 object-cover"
+                src={"https://via.placeholder.com/300x200"}
+                alt="Product Image"
+              />
+              {/* Card Content */}
+              <div className="p-5">
+                {/* Product Name */}
+                <h5 className="text-lg font-semibold tracking-tight text-gray-900">{product.name}</h5>
+                {/* Price */}
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-xl font-bold text-fuchsia-600">${product.price}</span>
+                  <span className="text-gray-500 line-through">$129.99</span>
                 </div>
-                {/* Card Header */}
-                <div className="p-4">
-                  <h2 className="text-lg font-bold">{product.name}</h2>
-                  <p className="text-gray-600">Price: ${product.price}</p>
-                </div>
-                {/* Card Footer */}
-                <div className="p-2 text-right">
-                  <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    <i className="fa fa-cart-plus"></i> Add to Cart
+                {/* Description */}
+                <p className="mt-2 text-gray-500">A perfect modern chair for your living room.</p>
+                {/* Buttons */}
+                <div className="flex justify-between items-center mt-4">
+                  <button className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+                    <i className="fa fa-cart-plus"></i>&ensp;Add to Cart
                   </button>
+                  <a href="#" className="text-fuchsia-600 hover:underline">
+                    View Details
+                  </a>
                 </div>
               </div>
             </div>

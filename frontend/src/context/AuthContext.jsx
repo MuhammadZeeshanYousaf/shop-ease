@@ -8,6 +8,7 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({ payload: null, token: null });
 
   useLayoutEffect(() => {
+    console.count("Token Setting Inspector");
     if (!user.token && localStorage.getItem("token")) {
       const localToken = localStorage.getItem("token");
       setUser({ token: localToken, payload: jwtDecode(localToken) });
@@ -26,6 +27,7 @@ const AuthProvider = ({ children }) => {
   }, [user.token]);
 
   useLayoutEffect(() => {
+    console.count("Error checking Inspector");
     const refreshInterceptor = api.interceptors.response.use(
       response => response,
       async error => {
@@ -78,12 +80,12 @@ const AuthProvider = ({ children }) => {
       return user.payload;
     } else if (user.token) {
       const decoded = jwtDecode(user.token);
-      setUser(prev => ({ ...prev, payload: decoded }));
+      // setUser(prev => ({ ...prev, payload: decoded }));
       return decoded;
     } else if (localStorage.getItem("token")) {
       const localToken = localStorage.getItem("token");
       const decoded = jwtDecode(localToken);
-      setUser({ token: localToken, payload: decoded });
+      // setUser({ token: localToken, payload: decoded });
       return decoded;
     }
   }

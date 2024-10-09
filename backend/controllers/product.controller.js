@@ -29,6 +29,21 @@ export const createProduct = async (req, res) => {
   }
 };
 
+export const showProduct = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ ok: false, message: "Invalid Product Id" });
+  }
+
+  try {
+    const product = await Product.findById(id).exec();
+    res.status(200).json({ ok: true, data: product });
+  } catch (error) {
+    res.status(500).json({ ok: false, message: "Server Error" });
+  }
+};
+
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
 

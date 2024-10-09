@@ -7,6 +7,8 @@ const Authenticated = ({ type }) => {
   const location = useLocation();
   const redirectPath = "/login/" + (location.pathname.includes("seller") ? "seller" : "customer");
 
+  console.log("Authenticated component")
+
   if (currentUser()) {
     const user = currentUser();
     return user.role !== type ? (

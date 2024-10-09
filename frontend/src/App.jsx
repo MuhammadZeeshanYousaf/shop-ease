@@ -12,8 +12,8 @@ import Register from "./pages/Register.jsx";
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Routes>
           {/* User section layout */}
           <Route path="/" element={<Layout />}>
@@ -34,8 +34,8 @@ function App() {
             <Route path="*" element={<ErrorPage code={404} message="Page not found" />} />
           </Route>
         </Routes>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

@@ -9,8 +9,8 @@ const productReducer = (state, action) => {
   }
 };
 
-const ProductFields = forwardRef((_props, ref) => {
-  const [product, dispatchProduct] = useReducer(productReducer, { name: "", price: "", image: "" });
+const ProductFields = forwardRef((props, ref) => {
+  const [product, dispatchProduct] = useReducer(productReducer, { name: props.name || "", price: props.price || "", image: props.image || "" });
 
   // Expose the product fields data to parent using ref
   useImperativeHandle(ref, () => ({ product }));
@@ -56,7 +56,6 @@ const ProductFields = forwardRef((_props, ref) => {
           id="image"
           name="image"
           type="file"
-          required
           accept="image/*"
           onChange={e => dispatchProduct({ type: "update", field: e.target.name, value: e.target.files[0] })}
           placeholder="Select product image"

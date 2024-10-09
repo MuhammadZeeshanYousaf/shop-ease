@@ -5,18 +5,18 @@ import ErrorPage from "../ErrorPage";
 import Dashboard from "./Dashboard";
 import Layout from "./Layout";
 import Products from "./Products";
-import CreateProduct from "./Products/Create";
+// import CreateProduct from "./Products/Create";
 import Customers from "./Customers";
 
 function SellerPages() {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/*" element={<Layout />}>
         <Route path="profile" element={<Profile />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="orders" element={<Orders />} />
-        <Route path="products" element={<Products/>} />
-        <Route path="products/create" element={<CreateProduct />} />
+        <Route path="products/*" element={<Products />} />
+        {/* <Route path="products/create" element={<CreateProduct />} /> */}
         <Route path="customers" element={<Customers />} />
       </Route>
 

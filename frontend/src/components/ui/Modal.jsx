@@ -1,4 +1,4 @@
-const FormModal = ({ isOpen, onClose, onSubmit, title, submitText, children }) => {
+const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -16,21 +16,16 @@ const FormModal = ({ isOpen, onClose, onSubmit, title, submitText, children }) =
             &times;
           </p>
         </div>
-        <form onSubmit={onSubmit} className="max-w-md mx-auto p-4 pt-6 pb-8 mb-4">
-          {/* Your modal content here */}
-          {children}
-          <div className="flex justify-end mt-4 gap-x-4">
-            <button className="btn" type="submit">
-              {submitText}
-            </button>
-            <button className="btn btn-outline" onClick={onClose}>
-              Cancel
-            </button>
-          </div>
-        </form>
+        {/* modal content here */}
+        {children}
+        <div className="flex justify-end mt-4 gap-x-4">
+          <button className="btn" onClick={onClose}>
+            Close
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default FormModal;
+export default Modal;
