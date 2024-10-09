@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../../utils/api";
@@ -28,27 +28,26 @@ const ViewProduct = () => {
     <>
       {product && (
         <Modal isOpen onClose={() => navigate("/seller/products")} title="View Product">
-          <div className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
+          <div className="w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
             {/* Product Image */}
-            <img className="w-full h-48 object-cover" src={product.imag ?? "https://via.placeholder.com/300x200"} alt="Product Image" />
+            <img className="w-full h-80 object-cover" src={product.image ?? "https://via.placeholder.com/300x200"} alt="Product Image" />
             {/* Card Content */}
             <div className="p-5">
               {/* Product Name */}
-              <h5 className="text-lg font-semibold tracking-tight text-gray-900">Stylish Modern Chair</h5>
+              <h5 className="text-lg font-semibold tracking-tight text-gray-900">{product.name}</h5>
               {/* Price */}
               <div className="flex items-center justify-between mt-2">
-                <span className="text-xl font-bold text-fuchsia-600">$99.99</span>
-                <span className="text-gray-500 line-through">$129.99</span>
+                <span className="text-xl font-bold text-fuchsia-600">${product.price}</span>
               </div>
               {/* Description */}
               <p className="mt-2 text-gray-500">A perfect modern chair for your living room.</p>
               {/* Buttons */}
               <div className="flex justify-between items-center mt-4">
-                <button className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
-                  Add to Cart
-                </button>
+                <Link to={`/seller/products/${product._id}/edit`} className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+                  Edit
+                </Link>
                 <a href="#" className="text-fuchsia-600 hover:underline">
-                  View Details
+                  Un-publish
                 </a>
               </div>
             </div>
