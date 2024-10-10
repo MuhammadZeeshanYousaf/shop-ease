@@ -8,16 +8,13 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState({ payload: null, token: null });
 
   useLayoutEffect(() => {
-    console.count("Token Setting Inspector");
-    if (!user.token && localStorage.getItem("token")) {
-      const localToken = localStorage.getItem("token");
-      setUser({ token: localToken, payload: jwtDecode(localToken) });
-    }
+    console.count("Setting up: Access token inspector...");
+    let userToken = user.token;
+    if (!userToken) userToken = localStorage.getItem("token");
 
-    // set token for every api call
+    // Pre set token for every api call
     const authInterceptor = api.interceptors.request.use(config => {
-      config.headers.Authorization =
-        !config._retry && user.token ? `Bearer ${user.token}` : config.headers.Authorization;
+      config.headers.Authorization = !config._retry && userToken ? `Bearer ${userToken}` : config.headers.Authorization;
       return config;
     });
 
@@ -27,7 +24,7 @@ const AuthProvider = ({ children }) => {
   }, [user.token]);
 
   useLayoutEffect(() => {
-    console.count("Error checking Inspector");
+    console.count("Setting up: Refresh on expire inspector...");
     const refreshInterceptor = api.interceptors.response.use(
       response => response,
       async error => {
@@ -40,14 +37,15 @@ const AuthProvider = ({ children }) => {
         ) {
           try {
             const res = await api.get("/refresh");
+            const userToken = res.data.token;
 
-            setUser({ token: res.data.token });
-
-            originalReq.headers.Authorization = `Bearer ${res.data.token}`;
+            signInUser(userToken);
+            originalReq.headers.Authorization = `Bearer ${userToken}`;
             originalReq._retry = true;
 
             return api(originalReq);
           } catch {
+            localStorage.removeItem("token");
             setUser({ token: null, payload: null });
           }
         }
@@ -62,8 +60,8 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   function signOutUser() {
-    setUser({ token: null, payload: null });
     localStorage.removeItem("token");
+    setUser({ token: null, payload: null });
   }
 
   function signInUser(token) {
@@ -87,6 +85,8 @@ const AuthProvider = ({ children }) => {
       const decoded = jwtDecode(localToken);
       // setUser({ token: localToken, payload: decoded });
       return decoded;
+    } else {
+      return null;
     }
   }
 
