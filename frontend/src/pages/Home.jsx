@@ -29,14 +29,14 @@ const Home = () => {
 
   useEffect(() => {
     api
-      .get("/products")
+      .get("/products?page=1&limit=10&sort=asc&sortBy=updatedAt")
       .then(res => {
         if (res.data.ok) {
           setProducts(res.data.data);
         }
       })
       .catch(err => {
-        console.error(err.response.message || err.message);
+        console.error(err.response.data?.message || err.message);
       });
   }, []);
 

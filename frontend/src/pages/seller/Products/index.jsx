@@ -25,7 +25,7 @@ const Products = () => {
         }
       })
       .catch(e => {
-        console.error(e.response.data.message || e.message);
+        console.error(e.response.data?.message || e.message);
       });
   };
 

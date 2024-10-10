@@ -1,12 +1,24 @@
 import mongoose from "mongoose";
 import Product from "../models/product.model.js";
+import { parsePageQuery } from "./helpers/general.helper.js";
 
-export const getProducts = async (_req, res) => {
+export const getProducts = async (req, res) => {
+  let sort = "desc",
+    sortBy = "createdAt";
+  if (["asc", "desc"].includes(req.query.sort)) sort = req.query.sort;
+  if (["createdAt", "updatedAt"].includes(req.query.sortBy)) sortBy = req.query.sortBy;
+
   try {
-    const products = await Product.find({}).sort({ createdAt: -1 });
-    res.status(200).json({ ok: true, data: products });
+    const { page, skip, limit } = parsePageQuery(req.query);
+    const products = await Product.find({})
+      .sort({ [sortBy]: sort })
+      .skip(skip)
+      .limit(limit);
+    const totalProducts = await Product.countDocuments({});
+    const totalPages = Math.ceil(totalProducts / limit);
+    res.status(200).json({ ok: true, data: products, meta: { currentPage: page, totalPages } });
   } catch (error) {
-    console.log("error in fetching products:", error.message);
+    console.log("Error in fetching products:", error.message);
     res.status(500).json({ ok: false, message: "Server Error" });
   }
 };

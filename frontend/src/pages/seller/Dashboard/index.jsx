@@ -11,7 +11,7 @@ const Dashboard = () => {
   //         }
   //       })
   //       .catch(e => {
-  //         toast.error(e.response.data.message || e.message);
+  //         toast.error(e.response.data?.message || e.message);
   //       });
   //   }, []);
 

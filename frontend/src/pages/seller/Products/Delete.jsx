@@ -18,7 +18,7 @@ function DeleteProduct() {
           } else toast(res.data.message);
         })
         .catch(e => {
-          console.error(e.response.data.message || e.message);
+          console.error(e.response.data?.message || e.message);
         });
     } else toast.error("Invalid product");
   };
