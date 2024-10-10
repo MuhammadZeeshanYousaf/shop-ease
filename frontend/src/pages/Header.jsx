@@ -4,13 +4,18 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { removeFromCart } from "../store/cartSlice";
+import CartCanvas from "./CartCanvas";
 
 const Navbar = () => {
   const { currentUser, signOutUser } = useAuth();
   const user = currentUser();
+  const cart = useSelector(state => state.cart);
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
-  const [cartItemCount, setCartItemCount] = useState(0);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleSearch = () => {
     console.log("Searching for:", searchTerm);
@@ -39,13 +44,12 @@ const Navbar = () => {
   };
 
   const handleCartIconClick = () => {
-    console.log("Cart icon clicked");
-    setCartItemCount(prevCount => prevCount + 1);
+    setIsCartOpen(!isCartOpen);
   };
 
   return (
     <header>
-      <nav className="bg-gray-800 text-white py-6">
+      <nav className="bg-gray-800 text-white py-6 sticky top-0">
         <div className="container mx-auto flex justify-between items-center">
           <Link to="/" className="flex items-center hover:cursor-pointer">
             <img src={logo} alt="Logo" className="h-12 w-12 mr-4" />
@@ -71,9 +75,9 @@ const Navbar = () => {
               <span className="text-2xl">
                 <i className="fa fa-shopping-cart"></i>
               </span>
-              {cartItemCount > 0 && (
+              {cart.length > 0 && (
                 <span className="absolute top-0 right-0 bg-fuchsia-500 text-white font-bold py-0.5 px-2 rounded-full text-xs">
-                  {cartItemCount}
+                  {cart.length}
                 </span>
               )}
             </button>
@@ -142,6 +146,13 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
+
+      <CartCanvas
+        show={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        onRemoveItem={id => () => dispatch(removeFromCart(id))}
+        cart={cart}
+      />
     </header>
   );
 };

@@ -23,6 +23,19 @@ export const getProducts = async (req, res) => {
   }
 };
 
+export const getSpecificProducts = async (req, res) => {
+  const productIds = req.query.ids;
+
+  try {
+    let products = [];
+    if (productIds) products = await Product.find({ _id: { $in: productIds.split(",") } });
+    res.status(200).json({ ok: true, data: products });
+  } catch (error) {
+    console.log("Error in fetching products:", error.message);
+    res.status(500).json({ ok: false, message: "Server Error" });
+  }
+};
+
 export const createProduct = async (req, res) => {
   const product = req.body; // user will send this data
 

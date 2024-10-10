@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import Slider from "react-slick";
 import api from "../utils/api";
+import { formatCurrency } from "../utils/helpers";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/cartSlice";
 
 const categories = [
   { id: 1, name: "Electronics", image: "https://picsum.photos/200/300" },
@@ -18,6 +21,7 @@ const bannerImages = [
 
 const Home = () => {
   const [hotProducts, setProducts] = useState([]);
+  const dispatch = useDispatch();
 
   const slickSettings = {
     dots: true,
@@ -26,6 +30,8 @@ const Home = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  const handleAddToCart = id => () => dispatch(addToCart(id));
 
   useEffect(() => {
     api
@@ -65,7 +71,7 @@ const Home = () => {
       </div>
       <div className="mb-8">
         <h2 className="text-2xl text-fuchsia-950 font-bold mb-4 border-b-2 border-fuchsia-200">Hot products</h2>
-        <div className="flex flex-wrap justify-center gap-10">
+        <div className="flex flex-wrap gap-10">
           {hotProducts.map(product => (
             <div
               key={product._id}
@@ -83,14 +89,17 @@ const Home = () => {
                 <h5 className="text-lg font-semibold tracking-tight text-gray-900">{product.name}</h5>
                 {/* Price */}
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-xl font-bold text-fuchsia-600">${product.price}</span>
+                  <span className="text-xl font-bold text-fuchsia-600">{formatCurrency(product.price)}</span>
                   <span className="text-gray-500 line-through">$129.99</span>
                 </div>
                 {/* Description */}
                 <p className="mt-2 text-gray-500">A perfect modern chair for your living room.</p>
                 {/* Buttons */}
                 <div className="flex justify-between items-center mt-4">
-                  <button className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+                  <button
+                    onClick={handleAddToCart(product._id)}
+                    className="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-4 rounded-md transition duration-300 ease-in-out"
+                  >
                     <i className="fa fa-cart-plus"></i>&ensp;Add to Cart
                   </button>
                   <a href="#" className="text-fuchsia-600 hover:underline">
