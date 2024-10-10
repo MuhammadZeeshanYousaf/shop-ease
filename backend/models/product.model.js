@@ -13,7 +13,6 @@ const productSchema = new Schema(
     },
     image: {
       type: String,
-      required: true,
     },
     user: {
       type: SchemaTypes.ObjectId,

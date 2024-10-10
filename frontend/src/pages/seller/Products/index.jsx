@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import api from "../../../utils/api";
 import toast from "react-hot-toast";
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import CreateProduct from "./Create";
 import EditProduct from "./Edit";
 import ViewProduct from "./View";
+import DeleteProduct from "./Delete";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
+  const reload = location.state?.reload;
 
-  useEffect(() => {
+  const fetchProducts = () => {
     api
       .get("/products/my_products")
       .then(res => {
@@ -24,6 +27,15 @@ const Products = () => {
       .catch(e => {
         console.error(e.response.data.message || e.message);
       });
+  };
+
+  if (reload) {
+    fetchProducts();
+    location.state.reload = false;
+  }
+
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   return (
@@ -49,7 +61,7 @@ const Products = () => {
                 onClick={() => navigate(`${product._id}/view`)}
               >
                 <td className="py-4 px-6">
-                  <img src={product.image} alt="product image" width={100} />
+                  <img src={product.image || "https://via.placeholder.com/80x80"} alt="product image" width={80} />
                 </td>
                 <td className="py-4 px-6">{product.name}</td>
                 <td className="py-4 px-6">{product.price}</td>
@@ -57,16 +69,17 @@ const Products = () => {
                   <Link
                     to={`${product._id}/edit`}
                     onClick={e => e.stopPropagation()}
-                    className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md mr-2 transition-colors duration-200"
+                    className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-md mr-2 transition-colors duration-200"
                   >
-                    Edit
+                    <i className="fa fa-pencil"></i> Edit
                   </Link>
-                  <button
+                  <Link
+                    to={`${product._id}/delete`}
                     onClick={e => e.stopPropagation()}
-                    className="text-white bg-red-500 hover:bg-red-600 px-4 py-2 rounded-md transition-colors duration-200"
+                    className="text-white bg-red-500 hover:bg-red-600 px-4 py-1 rounded-md transition-colors duration-200"
                   >
-                    Delete
-                  </button>
+                    <i className="fa fa-trash"></i> Delete
+                  </Link>
                 </td>
               </tr>
             ))
@@ -88,11 +101,12 @@ const Products = () => {
         </tbody>
       </table>
 
-      {/* Child Routes definition that need to re-render Products */}
+      {/* Child Routes definition that need to render along with Products */}
       <Routes>
         <Route path="create" element={<CreateProduct />} />
         <Route path=":productId/edit" element={<EditProduct />} />
         <Route path=":productId/view" element={<ViewProduct />} />
+        <Route path=":productId/delete" element={<DeleteProduct />} />
       </Routes>
     </div>
   );

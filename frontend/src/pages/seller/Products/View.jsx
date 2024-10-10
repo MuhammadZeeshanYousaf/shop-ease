@@ -21,7 +21,7 @@ const ViewProduct = () => {
         .catch(e => {
           console.error(e.response.data.message || e.message);
         });
-    } else toast.error("Invalid product id");
+    } else toast.error("Invalid product");
   }, []);
 
   return (

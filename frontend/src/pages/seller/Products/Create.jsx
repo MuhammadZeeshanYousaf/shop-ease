@@ -14,13 +14,13 @@ const CreateProduct = () => {
   const onProductSubmit = e => {
     e.preventDefault();
     const data = productRef.current.product;
-    if (data.name && data.price && data.image) {
+    if (data.name && data.price) {
       api
-        .post("/products", { ...data, image: data.image.name, user: currentUser().id })
+        .post("/products", { ...data, image: data.image?.name, user: currentUser().id })
         .then(res => {
           if (res.data.ok) {
             toast.success("Product created successfully");
-            navigate("/seller/products")
+            navigate("/seller/products", { state: { reload: true } });
           } else toast(res.data.message);
         })
         .catch(e => {
@@ -31,7 +31,6 @@ const CreateProduct = () => {
 
   return (
     <>
-
       <FormModal
         isOpen
         onClose={() => navigate("/seller/products")}

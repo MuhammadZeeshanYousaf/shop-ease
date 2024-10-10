@@ -3,7 +3,7 @@ import Product from "../models/product.model.js";
 
 export const getProducts = async (_req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}).sort({ createdAt: -1 });
     res.status(200).json({ ok: true, data: products });
   } catch (error) {
     console.log("error in fetching products:", error.message);
@@ -14,8 +14,8 @@ export const getProducts = async (_req, res) => {
 export const createProduct = async (req, res) => {
   const product = req.body; // user will send this data
 
-  if (!product.name || !product.price || !product.image) {
-    return res.status(400).json({ ok: false, message: "Please provide all fields" });
+  if (!product.name || !product.price) {
+    return res.status(400).json({ ok: false, message: "Please provide all required fields" });
   }
 
   const newProduct = new Product(product);
@@ -81,7 +81,7 @@ export const getMyProducts = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const products = await Product.find({ user: userId });
+    const products = await Product.find({ user: userId }).sort({ createdAt: -1 });
     res.status(200).json({ ok: true, data: products });
   } catch (error) {
     console.log("Error in fetching products:", error.message);

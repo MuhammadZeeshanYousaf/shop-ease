@@ -23,19 +23,19 @@ const EditProduct = () => {
         .catch(e => {
           console.error(e.response.data.message || e.message);
         });
-    } else toast.error("Invalid product id");
+    } else toast.error("Invalid product");
   }, []);
 
   const onProductSubmit = e => {
     e.preventDefault();
     const data = productRef.current.product;
-    if (data.name && data.price && data.image) {
+    if (data.name && data.price) {
       api
-        .put(`/products/${productId}`, { ...data, image: data.image.name })
+        .put(`/products/${productId}`, { ...data, image: data.image?.name})
         .then(res => {
           if (res.data.ok) {
             toast.success("Product updated successfully");
-            navigate("/seller/products");
+            navigate("/seller/products", { state: { reload: true } });
           } else toast(res.data.message);
         })
         .catch(e => {

@@ -31,18 +31,6 @@ function Layout() {
         <ul className={`lg:block ${mobileMenuOpen ? "block" : "hidden"}`}>
           <li className="mb-2">
             <Link
-              to="/seller/orders"
-              className={`w-full p-3 text-left rounded-md ${
-                activeTab === "orders"
-                  ? "btn btn-gradient"
-                  : "text-gray-600 hover:bg-fuchsia-100 hover:text-fuchsia-600"
-              }`}
-            >
-              Orders
-            </Link>
-          </li>
-          <li className="mb-2">
-            <Link
               to="/seller/products"
               className={`w-full p-3 text-left rounded-md ${
                 activeTab === "products" || activeTab === "dashboard"
@@ -51,6 +39,18 @@ function Layout() {
               }`}
             >
               Products
+            </Link>
+          </li>
+          <li className="mb-2">
+            <Link
+              to="/seller/orders"
+              className={`w-full p-3 text-left rounded-md ${
+                activeTab === "orders"
+                  ? "btn btn-gradient"
+                  : "text-gray-600 hover:bg-fuchsia-100 hover:text-fuchsia-600"
+              }`}
+            >
+              Orders
             </Link>
           </li>
           <li className="mb-2">

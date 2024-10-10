@@ -1,4 +1,4 @@
-const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, hideCloseBtn = false, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -19,9 +19,11 @@ const Modal = ({ isOpen, onClose, title, children }) => {
         {/* modal content here */}
         {children}
         <div className="flex justify-end mt-4 gap-x-4">
-          <button className="btn" onClick={onClose}>
-            Close
-          </button>
+          {!hideCloseBtn && (
+            <button className="btn" onClick={onClose}>
+              Close
+            </button>
+          )}
         </div>
       </div>
     </div>
