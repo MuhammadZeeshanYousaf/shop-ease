@@ -8,10 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../store/cartSlice";
 import CartCanvas from "./CartCanvas";
 
-const Navbar = () => {
+const Header = () => {
   const { currentUser, signOutUser } = useAuth();
   const user = currentUser();
-  const cart = useSelector(state => state.cart);
+  const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
@@ -164,4 +164,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Header;

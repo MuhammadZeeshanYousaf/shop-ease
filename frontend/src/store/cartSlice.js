@@ -1,35 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // initialState = [{ id: String, quantity: Number }]
-
 const cartSlice = createSlice({
   name: "cart",
-  initialState: [],
+  initialState: {
+    items: [],
+  },
   reducers: {
-    addToCart(state, action) {
-      const existingItem = state.find(item => item.id === action.payload);
+    addToCart({ items }, action) {
+      const existingItem = items.find(item => item.id === action.payload);
 
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
-        state.push({ id: action.payload, quantity: 1 });
+        items.push({ id: action.payload, quantity: 1 });
       }
     },
-    decrementFromCart(state, action) {
-      const existingItem = state.find(item => item.id === action.payload);
+    decrementFromCart({ items }, action) {
+      const existingItem = items.find(item => item.id === action.payload);
 
-      if (existingItem &&  existingItem.quantity > 1) {
+      if (existingItem && existingItem.quantity > 1) {
         existingItem.quantity -= 1;
       } else {
-        const indexToRemove = state.indexOf(existingItem);
-        if (indexToRemove !== -1) state.splice(indexToRemove, 1);
+        const indexToRemove = items.indexOf(existingItem);
+        if (indexToRemove !== -1) items.splice(indexToRemove, 1);
       }
     },
     removeFromCart(state, action) {
-      return state.filter(item => item.id !== action.payload);
+      state.items = state.items.filter(item => item.id !== action.payload);
     },
-    clearCart(state) {
-      state.length = 0;
+    clearCart({ items }) {
+      items.length = 0;
     },
   },
 });

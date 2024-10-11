@@ -5,7 +5,7 @@ import QuantityChip from "./QuantityChip";
 import { useLayoutEffect, useState } from "react";
 
 const ProductCard = ({ product }) => {
-  const cart = useSelector(state => state.cart);
+  const cart = useSelector(state => state.cart.items);
   const [cartProduct, setCartProduct] = useState(null);
   const dispatch = useDispatch();
 

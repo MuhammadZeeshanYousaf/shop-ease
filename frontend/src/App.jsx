@@ -9,36 +9,39 @@ import CustomerPages from "./pages/customer/index.jsx";
 import ErrorPage from "./pages/ErrorPage.jsx";
 import Register from "./pages/Register.jsx";
 import { Provider } from "react-redux";
-import reduxStore from "./store";
+import { PersistGate } from "redux-persist/integration/react";
+import { reduxStore, storePersistor } from "./store";
 import Checkout from "./pages/Checkout.jsx";
 
 function App() {
   return (
     <Router>
       <Provider store={reduxStore}>
-        <AuthProvider>
-          <Routes>
-            {/* User section layout */}
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="checkout" element={<Checkout />} />
-              <Route path="login/:role" element={<Login />} />
-              <Route path="register/:role" element={<Register />} />
-            </Route>
+        <PersistGate loading={null} persistor={storePersistor}>
+          <AuthProvider>
+            <Routes>
+              {/* User section layout */}
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="checkout" element={<Checkout />} />
+                <Route path="login/:role" element={<Login />} />
+                <Route path="register/:role" element={<Register />} />
+              </Route>
 
-            {/* Authenticated Routes */}
-            <Route path="customer" element={<Authenticated type="customer" />}>
-              <Route path="*" element={<CustomerPages />} />
-            </Route>
-            <Route path="seller" element={<Authenticated type="seller" />}>
-              <Route path="*" element={<SellerPages />} />
-            </Route>
+              {/* Authenticated Routes */}
+              <Route path="customer" element={<Authenticated type="customer" />}>
+                <Route path="*" element={<CustomerPages />} />
+              </Route>
+              <Route path="seller" element={<Authenticated type="seller" />}>
+                <Route path="*" element={<SellerPages />} />
+              </Route>
 
-            <Route path="/" element={<Layout />}>
-              <Route path="*" element={<ErrorPage code={404} message="Page not found" />} />
-            </Route>
-          </Routes>
-        </AuthProvider>
+              <Route path="/" element={<Layout />}>
+                <Route path="*" element={<ErrorPage code={404} message="Page not found" />} />
+              </Route>
+            </Routes>
+          </AuthProvider>
+        </PersistGate>
       </Provider>
     </Router>
   );
