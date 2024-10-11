@@ -4,10 +4,8 @@ import ProductFields from "./ProductFields";
 import { useRef } from "react";
 import toast from "react-hot-toast";
 import api from "../../../utils/api";
-import { useAuth } from "../../../context/AuthContext";
 
 const CreateProduct = () => {
-  const { currentUser } = useAuth();
   const navigate = useNavigate();
   const productRef = useRef();
 
@@ -15,8 +13,21 @@ const CreateProduct = () => {
     e.preventDefault();
     const data = productRef.current.product;
     if (data.name && data.price) {
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("price", data.price);
+      formData.append("image", data.image);
+
       api
-        .post("/products", { ...data, image: data.image?.name, user: currentUser().id })
+        .post(
+          "/products",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        )
         .then(res => {
           if (res.data.ok) {
             toast.success("Product created successfully");
@@ -24,7 +35,7 @@ const CreateProduct = () => {
           } else toast(res.data.message);
         })
         .catch(e => {
-          console.error(e.response.data?.message || e.message);
+          console.error(e.response?.data?.message || e.message);
         });
     } else toast.error("Fill all required fields");
   };

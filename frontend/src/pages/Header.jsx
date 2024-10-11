@@ -94,7 +94,7 @@ const Header = () => {
               >
                 &ensp;&ensp;{user.firstName}&ensp;<i className="fa fa-chevron-down"></i>&ensp;&ensp;
                 {isLoginDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white p-2 px-4 text-start rounded-lg top-20 right-auto">
+                  <div className="absolute bg-gray-800 text-white p-2 px-4 rounded-lg top-20 right-auto">
                     <div className="flex items-center border-b-2 py-3 border-b-black ">
                       <img
                         src="https://via.placeholder.com/100x100"
@@ -132,7 +132,7 @@ const Header = () => {
               >
                 &ensp;&ensp;Login&ensp;&ensp;
                 {isLoginDropdownOpen && (
-                  <div className="absolute text-start bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
+                  <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
                     <ul>
                       <li>
                         <Link to="/login/customer" className="py-2 hover:text-fuchsia-500">

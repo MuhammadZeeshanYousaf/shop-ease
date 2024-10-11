@@ -37,13 +37,15 @@ export const getSpecificProducts = async (req, res) => {
 };
 
 export const createProduct = async (req, res) => {
-  const product = req.body; // user will send this data
+  const { name, price } = req.body; // user will send this data
+  const image = req.file ? req.file.path : "";
+  console.log("Product uploaded Image:", req.file);
 
-  if (!product.name || !product.price) {
+  if (!name || !price) {
     return res.status(400).json({ ok: false, message: "Please provide all required fields" });
   }
 
-  const newProduct = new Product(product);
+  const newProduct = new Product({ name, price, user: req.user.id, image });
 
   try {
     await newProduct.save();
