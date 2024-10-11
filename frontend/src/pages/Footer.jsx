@@ -79,7 +79,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="text-center">
-          <p className="text-gray-400 mb-4">&copy; 2023 Ecommerce Platform. All rights reserved.</p>
+          <p className="text-gray-400 mb-4">&copy; 2023 Shop Ease. All rights reserved.</p>
           <ul className="list-none mb-0 flex justify-center">
             <li className="mr-4">
               <a href="#" className="text-gray-400 hover:text-white">

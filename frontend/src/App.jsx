@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import { Toaster } from 'react-hot-toast';
 import Home from "./pages/Home.jsx";
 import Layout from "./pages/Layout.jsx";
 import Login from "./pages/Login.jsx";
@@ -11,6 +10,7 @@ import ErrorPage from "./pages/ErrorPage.jsx";
 import Register from "./pages/Register.jsx";
 import { Provider } from "react-redux";
 import reduxStore from "./store";
+import Checkout from "./pages/Checkout.jsx";
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
             {/* User section layout */}
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
+              <Route path="checkout" element={<Checkout />} />
               <Route path="login/:role" element={<Login />} />
               <Route path="register/:role" element={<Register />} />
             </Route>

@@ -3,9 +3,13 @@ import OffCanvas from "../components/ui/Offcanvas";
 import api from "../utils/api";
 import toast from "react-hot-toast";
 import { formatCurrency } from "../utils/helpers";
+import QuantityChip from "../components/ui/QuantityChip";
+import { addToCart, decrementFromCart } from "../store/cartSlice";
+import { useDispatch } from "react-redux";
 
-function CartCanvas({ show, onClose, onRemoveItem, cart }) {
+function CartCanvas({ show, onClose, onRemoveItem, cart, onCheckout }) {
   const [cartProducts, setCartProducts] = useState([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const itemIds = cart.map(item => item.id);
@@ -21,23 +25,18 @@ function CartCanvas({ show, onClose, onRemoveItem, cart }) {
     else setCartProducts(prev => prev.filter(p => !itemIds.includes(p._id)));
   }, [show, cart]);
 
-  function getQuantityOf(id) {
+  const getQuantityOf = id => {
     const product = cart.find(p => p.id === id);
     return product?.quantity;
-  }
+  };
 
   const getTotal = () => {
     const total = cartProducts.reduce((total, item) => {
-      console.log("total:", total, "item: ", item);
-      // Find the product with the same id
       const product = cart.find(product => product.id === item._id);
-
       // If product exists, calculate the total for this item
-      if (product) {
-        return total + product.quantity * item.price;
-      }
+      if (product) return total + product.quantity * item.price;
 
-      // Return total if product does not exist
+      // Return total to reducer if product does not exist
       return total;
     }, 0);
 
@@ -60,9 +59,14 @@ function CartCanvas({ show, onClose, onRemoveItem, cart }) {
               <div className="flex-1">
                 <h3 className="text-lg font-semibold">
                   {product.name}
-                  <small className="text-sm text-gray-400 m-2 ">x&nbsp;{getQuantityOf(product._id)}</small>
+                  {/* <small className="text-sm text-gray-400 m-2 ">x&nbsp;{getQuantityOf(product._id)}</small> */}
                 </h3>
                 <p className="text-sm text-gray-500">{formatCurrency(product.price)}</p>
+                <QuantityChip
+                  quantity={getQuantityOf(product._id)}
+                  onIncrement={() => dispatch(addToCart(product._id))}
+                  onDecrement={() => dispatch(decrementFromCart(product._id))}
+                />
               </div>
               <div className="text-right">
                 <p className="text-lg font-semibold">{formatCurrency(getQuantityOf(product._id) * product.price)}</p>
@@ -79,8 +83,15 @@ function CartCanvas({ show, onClose, onRemoveItem, cart }) {
           <p className="text-gray-400 text-center italic my-10">No item in cart</p>
         )}
 
-        <div className="flex justify-end mt-4">
-          <p className="text-xl font-semibold">Total: {getTotal()}</p>
+        <div className="flex justify-between mt-4 border-t-2 pt-3">
+          <p className="text-xl font-semibold">Total:</p>
+          <p className="text-xl font-semibold">{getTotal()}</p>
+        </div>
+
+        <div className="mt-5">
+          <button onClick={onCheckout} className="btn w-full" disabled={cart.length < 1}>
+            Checkout
+          </button>
         </div>
       </div>
     </OffCanvas>

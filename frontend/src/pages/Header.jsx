@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../assets/images/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 import toast from "react-hot-toast";
@@ -13,12 +13,18 @@ const Navbar = () => {
   const user = currentUser();
   const cart = useSelector(state => state.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleSearch = () => {
     console.log("Searching for:", searchTerm);
+  };
+
+  const onCheckout = () => {
+    setIsCartOpen(false);
+    navigate("/checkout");
   };
 
   const logoutUser = () => {
@@ -88,7 +94,7 @@ const Navbar = () => {
               >
                 &ensp;&ensp;{user.firstName}&ensp;<i className="fa fa-chevron-down"></i>&ensp;&ensp;
                 {isLoginDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white p-2 px-4 rounded-lg top-20 right-auto">
+                  <div className="absolute bg-gray-800 text-white p-2 px-4 text-start rounded-lg top-20 right-auto">
                     <div className="flex items-center border-b-2 py-3 border-b-black ">
                       <img
                         src="https://via.placeholder.com/100x100"
@@ -99,20 +105,20 @@ const Navbar = () => {
                     </div>
                     <ul>
                       {user.role === "seller" && (
-                        <li className="py-2">
+                        <li>
                           <Link to="seller/dashboard" className="py-2 hover:text-fuchsia-500">
-                            Dashboard
+                            <i className="fa fa-columns"></i> Dashboard
                           </Link>
                         </li>
                       )}
-                      <li className="py-2">
+                      <li>
                         <Link to={`/${user.role}/profile`} className="py-2 hover:text-fuchsia-500">
-                          Profile
+                          <i className="fa fa-user"></i> Profile
                         </Link>
                       </li>
-                      <li className="py-2">
+                      <li>
                         <Link onClick={logoutUser} className="py-2 hover:text-fuchsia-500">
-                          Logout
+                          <i className="fa fa-power-off"></i> Logout
                         </Link>
                       </li>
                     </ul>
@@ -126,16 +132,16 @@ const Navbar = () => {
               >
                 &ensp;&ensp;Login&ensp;&ensp;
                 {isLoginDropdownOpen && (
-                  <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
+                  <div className="absolute text-start bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
                     <ul>
-                      <li className="py-2">
+                      <li>
                         <Link to="/login/customer" className="py-2 hover:text-fuchsia-500">
-                          Customer
+                          <i className="fa fa-user"></i> Customer
                         </Link>
                       </li>
-                      <li className="py-2">
+                      <li>
                         <Link to="/login/seller" className="py-2 hover:text-fuchsia-500">
-                          Seller
+                          <i className="fa fa-address-card"></i> Seller
                         </Link>
                       </li>
                     </ul>
@@ -152,6 +158,7 @@ const Navbar = () => {
         onClose={() => setIsCartOpen(false)}
         onRemoveItem={id => () => dispatch(removeFromCart(id))}
         cart={cart}
+        onCheckout={onCheckout}
       />
     </header>
   );
