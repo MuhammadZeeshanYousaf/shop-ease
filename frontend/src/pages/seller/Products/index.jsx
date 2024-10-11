@@ -41,7 +41,7 @@ const Products = () => {
   return (
     <div className="mx-auto overflow-x-auto">
       <Link to="/seller/products/create" className="btn mb-5">
-        Create Product
+        <i className="fa fa-plus"></i> Add Product
       </Link>
       <table className="min-w-full bg-white">
         <thead>

@@ -2,14 +2,37 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import { useState } from "react";
 import { capitalize } from "../../utils/helpers";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
 
 function Layout() {
   const location = useLocation();
+  const { currentUser, signOutUser } = useAuth();
+  const user = currentUser();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isProfileDropdown, setIsProfileDropdown] = useState(false);
   const currentPath = location.pathname;
   const pathNames = currentPath.split("/");
   const activeTab = pathNames[pathNames.length - 1].split("?")[0];
+
+  const logoutUser = () => {
+    if (user) {
+      api
+        .delete("/logout")
+        .then(res => {
+          if (res.data.ok) {
+            signOutUser();
+            toast.success(res.data.message);
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch(e => {
+          console.error(e.response.data?.message || e.message);
+        });
+    }
+  };
 
   return (
     <main className="flex h-screen bg-fuchsia-50">
@@ -38,7 +61,7 @@ function Layout() {
                   : "text-gray-600 hover:bg-fuchsia-100 hover:text-fuchsia-600"
               }`}
             >
-              Products
+              <i className="fa fa-cube"></i> Products
             </Link>
           </li>
           <li className="mb-2">
@@ -50,7 +73,7 @@ function Layout() {
                   : "text-gray-600 hover:bg-fuchsia-100 hover:text-fuchsia-600"
               }`}
             >
-              Orders
+              <i className="fa fa-list-alt"></i> Orders
             </Link>
           </li>
           <li className="mb-2">
@@ -62,21 +85,25 @@ function Layout() {
                   : "text-gray-600 hover:bg-fuchsia-100 hover:text-fuchsia-600"
               }`}
             >
-              Customers
+              <i className="fa fa-users"></i> Customers
             </Link>
           </li>
         </ul>
       </div>
 
       {/* Main Right Content */}
-      <div className="flex-1 pt-1 pb-4 lg:ml-64 xl:ml-80">
+      <div className="flex-1 pt-1 pb-4 lg:ml-64 xl:ml-[21rem] xl:mr-5">
         {/* Header */}
         <div className="container border my-4 mx-auto p-3 bg-white shadow-lg shadow-fuchsia-200 rounded-md">
           <div className="flex flex-row justify-between items-center">
             <div>
               <h2 className="text-xl font-semibold p-2">{capitalize(activeTab)}</h2>
             </div>
-            <div className="flex items-center rounded-lg p-2 hover:bg-gray-200 hover:cursor-pointer">
+            <div
+              className="flex items-center rounded-lg p-2 hover:bg-gray-200 hover:cursor-pointer"
+              onMouseEnter={() => setIsProfileDropdown(true)}
+              onMouseLeave={() => setIsProfileDropdown(false)}
+            >
               <img
                 src="https://via.placeholder.com/100x100"
                 alt="profile image"
@@ -85,6 +112,22 @@ function Layout() {
               <p className="text-black font-semibold">
                 Zeeshan Yousaf&ensp;<i className="fa fa-chevron-down"></i>
               </p>
+              {isProfileDropdown && (
+                <div className="absolute drop-shadow-lg bg-white py-2 px-6 text-lg rounded-lg top-[5.3rem] right-auto">
+                  <ul>
+                    <li className="border-b">
+                      <Link to="/seller/profile" className="py-2 px-4 hover:text-fuchsia-500">
+                        <i className="fa fa-user"></i> Profile
+                      </Link>
+                    </li>
+                    <li>
+                      <button onClick={logoutUser} className="py-2 px-4 hover:text-fuchsia-500">
+                        <i className="fa fa-power-off"></i> Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>

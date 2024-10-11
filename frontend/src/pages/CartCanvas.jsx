@@ -18,7 +18,7 @@ function CartCanvas({ show, onClose, onRemoveItem, cart }) {
           } else toast(res.data.message);
         })
         .catch(e => console.log(e.response.data.message || e.message));
-    setCartProducts(prev => prev.filter(p => !itemIds.includes(p._id)));
+    else setCartProducts(prev => prev.filter(p => !itemIds.includes(p._id)));
   }, [show, cart]);
 
   function getQuantityOf(id) {
