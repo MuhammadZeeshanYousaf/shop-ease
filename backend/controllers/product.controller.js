@@ -38,8 +38,9 @@ export const getSpecificProducts = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   const { name, price } = req.body; // user will send this data
-  const image = req.file ? req.file.path : "";
+  const image = req.file ? req.file.path ?? req.file.location : "";
   console.log("Product uploaded Image:", req.file);
+  console.log("Product image:", image);
 
   if (!name || !price) {
     return res.status(400).json({ ok: false, message: "Please provide all required fields" });

@@ -30,7 +30,7 @@ const Home = () => {
 
   useEffect(() => {
     api
-      .get("/products?page=1&limit=10&sort=asc&sortBy=updatedAt")
+      .get("/products?page=1&limit=9&sort=desc&sortBy=updatedAt")
       .then(res => {
         if (res.data.ok) {
           setProducts(res.data.data);

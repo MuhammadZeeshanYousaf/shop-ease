@@ -22,7 +22,7 @@ const ProductCard = ({ product }) => {
   return (
     <div key={product._id} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
       {/* Product Image */}
-      <img className="w-full h-48 object-cover" src={"https://via.placeholder.com/300x200"} alt="Product Image" />
+      <img className="w-full h-48 object-cover" src={product.image || "https://via.placeholder.com/300x200"} alt="Product Image" />
       {/* Card Content */}
       <div className="p-5">
         {/* Product Name */}

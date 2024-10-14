@@ -1,9 +1,9 @@
 import express from "express";
-import dotenv from "dotenv";
 import path from "path";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import dotenv from "dotenv";
 dotenv.config();
 
 import { connectDB } from "./config/db.js";
