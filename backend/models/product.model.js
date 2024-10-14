@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { deleteByUrl } from "../config/upload.js";
 const { Schema, model, SchemaTypes } = mongoose;
 
 const productSchema = new Schema(
@@ -24,6 +25,10 @@ const productSchema = new Schema(
     timestamps: true, // createdAt, updatedAt
   }
 );
+
+// Post middleware for the update operation
+productSchema.post("findOneAndUpdate", (doc) => deleteByUrl(doc.image)) // doc object must be older document
+productSchema.post("findByIdAndDelete", (doc) => deleteByUrl(doc.image))
 
 const Product = model("Product", productSchema);
 

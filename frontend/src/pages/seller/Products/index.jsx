@@ -61,7 +61,7 @@ const Products = () => {
                 onClick={() => navigate(`${product._id}/view`)}
               >
                 <td className="py-4 px-6">
-                  <img src={product.image || "https://via.placeholder.com/80x80"} alt="product image" width={80} />
+                  <img src={product.image || "https://via.placeholder.com/80x80"} alt="product image" width={80} className="rounded" />
                 </td>
                 <td className="py-4 px-6">{product.name}</td>
                 <td className="py-4 px-6">{product.price}</td>

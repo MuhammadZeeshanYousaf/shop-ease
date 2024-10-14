@@ -30,7 +30,7 @@ const ViewProduct = () => {
         <Modal isOpen onClose={() => navigate("/seller/products")} title="View Product">
           <div className="w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
             {/* Product Image */}
-            <img className="w-full h-80 object-cover" src={product.image ?? "https://via.placeholder.com/300x200"} alt="Product Image" />
+            <img className="w-full h-80 object-contain" src={product.image ?? "https://via.placeholder.com/300x200"} alt="Product Image" />
             {/* Card Content */}
             <div className="p-5">
               {/* Product Name */}

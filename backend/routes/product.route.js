@@ -15,11 +15,13 @@ const router = express.Router();
 
 router.get("/", getProducts);
 router.get("/specific", getSpecificProducts);
+
+// authenticated routes
 router.use(verifyToken);
 router.get("/my_products", authorize("seller"), getMyProducts);
-router.post("/", upload.single("image"), createProduct);
 router.get("/:id", showProduct);
-router.put("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+router.post("/", authorize("seller"), upload.single("image"), createProduct);
+router.put("/:id", authorize("seller"), upload.single("image"), updateProduct);
+router.delete("/:id", authorize("seller"), deleteProduct);
 
 export default router;

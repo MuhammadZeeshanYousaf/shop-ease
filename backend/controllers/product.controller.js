@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Product from "../models/product.model.js";
 import { parsePageQuery } from "./helpers/general.helper.js";
+import { deleteByUrl, deleteFile } from "../config/upload.js";
 
 export const getProducts = async (req, res) => {
   let sort = "desc",
@@ -40,9 +41,9 @@ export const createProduct = async (req, res) => {
   const { name, price } = req.body; // user will send this data
   const image = req.file ? req.file.path ?? req.file.location : "";
   console.log("Product uploaded Image:", req.file);
-  console.log("Product image:", image);
 
   if (!name || !price) {
+    if (image) deleteFile(req.file.key);
     return res.status(400).json({ ok: false, message: "Please provide all required fields" });
   }
 
@@ -50,8 +51,9 @@ export const createProduct = async (req, res) => {
 
   try {
     await newProduct.save();
-    res.status(201).json({ ok: true, data: newProduct });
+    res.status(201).json({ ok: true, data: newProduct, message: "Product created successfully" });
   } catch (error) {
+    if (image) deleteFile(req.file.key);
     console.error("Error in Create product:", error.message);
     res.status(500).json({ ok: false, message: "Server Error" });
   }
@@ -81,9 +83,13 @@ export const updateProduct = async (req, res) => {
     return res.status(404).json({ ok: false, message: "Invalid Product Id" });
   }
 
+  const image = req.file ? req.file.path ?? req.file.location : "";
+  if (image) product.image = image;
+
   try {
-    const updatedProduct = await Product.findByIdAndUpdate(id, product, { new: true });
-    res.status(200).json({ ok: true, data: updatedProduct });
+    // const updatedProduct = await Product.findByIdAndUpdate(id, product, { new: true });
+    await Product.findByIdAndUpdate(id, product);
+    res.status(200).json({ ok: true, data: { ...product, id }, message: "Product updated successfully" });
   } catch (error) {
     res.status(500).json({ ok: false, message: "Server Error" });
   }
@@ -97,7 +103,8 @@ export const deleteProduct = async (req, res) => {
   }
 
   try {
-    await Product.findByIdAndDelete(id);
+    const product = await Product.findByIdAndDelete(id);
+    if (product.image) deleteByUrl(product.image);
     res.status(200).json({ ok: true, message: "Product deleted" });
   } catch (error) {
     console.log("error in deleting product:", error.message);

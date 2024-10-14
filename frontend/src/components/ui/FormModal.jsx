@@ -1,4 +1,4 @@
-const FormModal = ({ isOpen, onClose, onSubmit, title, submitText, children }) => {
+const FormModal = ({ isOpen, onClose, onSubmit, title, submitText, loading, children }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,10 +20,10 @@ const FormModal = ({ isOpen, onClose, onSubmit, title, submitText, children }) =
           {/* Your modal content here */}
           {children}
           <div className="flex justify-end mt-4 gap-x-4">
-            <button className="btn" type="submit">
+            <button className="btn" type="submit" disabled={loading}>
               {submitText}
             </button>
-            <button className="btn btn-outline" onClick={onClose}>
+            <button className="btn btn-outline" onClick={onClose} disabled={loading}>
               Cancel
             </button>
           </div>

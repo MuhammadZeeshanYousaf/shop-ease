@@ -1,4 +1,4 @@
-import { S3Client } from "@aws-sdk/client-s3";
+import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import dotenv from "dotenv";
@@ -28,7 +28,44 @@ const s3Storage = multerS3({
   },
 });
 
+// Function to delete file
+async function deleteFile(fileKey) {
+  if (fileKey)
+    try {
+      const deleteParams = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: fileKey, // File key (name) in the S3 bucket
+      };
+
+      await s3.send(new DeleteObjectCommand(deleteParams));
+      console.log("File deleted successfully");
+    } catch (error) {
+      console.error("Error deleting file: ", error);
+    }
+}
+
+const deleteByUrl = async fileUrl => {
+  if (fileUrl)
+    try {
+      const url = new URL(fileUrl);
+      const fileKey = decodeURIComponent(url.pathname.slice(1)); // Remove leading slash
+
+      const deleteParams = {
+        Bucket: process.env.AWS_BUCKET,
+        Key: fileKey,
+      };
+
+      const command = new DeleteObjectCommand(deleteParams);
+      await s3.send(command); // Send the command to delete the object
+
+      console.log(`File ${fileKey} deleted successfully`);
+    } catch (error) {
+      console.error(`Error deleting file: ${error.message}`);
+    }
+};
+
 //Initialize Multer with the storage configuration
 const upload = multer({ storage: s3Storage });
 
 export default upload;
+export { deleteFile, deleteByUrl };

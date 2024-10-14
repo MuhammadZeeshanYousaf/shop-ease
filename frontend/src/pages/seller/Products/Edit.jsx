@@ -10,6 +10,7 @@ const EditProduct = () => {
   const productRef = useRef();
   const { productId } = useParams();
   const [product, setProduct] = useState();
+  const [loading, setLoading] = useState(false);
 
   useLayoutEffect(() => {
     if (productId) {
@@ -29,18 +30,27 @@ const EditProduct = () => {
   const onProductSubmit = e => {
     e.preventDefault();
     const data = productRef.current.product;
+
     if (data.name && data.price) {
-      api
-        .put(`/products/${productId}`, { ...data, image: data.image?.name})
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("name", data.name);
+      formData.append("price", data.price);
+      if (data.image) formData.append("image", data.image);
+
+      const apiPromise = api
+        .put(`/products/${productId}`, formData, { headers: { "Content-Type": "multipart/form-data" } })
         .then(res => {
-          if (res.data.ok) {
-            toast.success("Product updated successfully");
-            navigate("/seller/products", { state: { reload: true } });
-          } else toast(res.data.message);
+          if (res.data.ok) navigate("/seller/products", { state: { reload: true } });
+          return res;
         })
-        .catch(e => {
-          console.error(e.response.data?.message || e.message);
-        });
+        .finally(() => setLoading(false));
+
+      toast.promise(apiPromise, {
+        loading: "Updating product...",
+        success: res => res.data.message,
+        error: e => e.response?.data?.message ?? e.message,
+      });
     } else toast.error("Fill all required fields");
   };
 
@@ -53,6 +63,7 @@ const EditProduct = () => {
           title="Edit Product"
           submitText="Update"
           onSubmit={onProductSubmit}
+          loading={loading}
         >
           <ProductFields ref={productRef} {...product} />
         </FormModal>
