@@ -36,22 +36,29 @@ function Layout() {
 
   return (
     <main className="flex h-screen bg-fuchsia-50">
-      <div className="lg:w-64 xl:w-80 h-screen p-4 bg-white border-r border-gray-200 lg:fixed lg:top-0 lg:left-0 lg:h-screen lg:w-64 xl:w-80 lg:overflow-y-auto">
-        <div className="flex items-center justify-between mb-4 mt-4">
+      {/* Left Side Menu Bar */}
+      <div
+        className={`lg:w-64 xl:w-80 h-screen p-4 bg-white border-r border-gray-200 lg:fixed lg:top-0 lg:left-0 lg:h-screen lg:overflow-y-auto transform transition-transform duration-300 ease-in-out 
+          ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 absolute`}
+      >
+        <div className="flex items-center justify-between mb-5 mt-2">
           <Link
             to="/"
-            className="text-xl font-extrabold font-mono text-fuchsia-950 border-x-8 m-3 px-3 border-fuchsia-300 uppercase w-full hover:cursor-pointer select-none"
+            className="text-xl font-extrabold font-mono text-fuchsia-950 border-x-8 m-2 px-2 border-fuchsia-300 uppercase w-full hover:cursor-pointer select-none"
           >
             <img src={logo} alt="" className="w-12 inline-block mr-3" />
-            <span>Shop Ease</span>
+            <nobr>Shop Ease</nobr>
           </Link>
-          <button className="lg:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            <i className="fa fa-bars text-black"></i>
+          <button
+            className="text-2xl hover:bg-fuchsia-100 hover:text-fuchsia-600 bg-opacity-5 rounded-full cursor-pointer px-1.5 lg:hidden"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            &times;
           </button>
         </div>
 
         {/* Tabs */}
-        <ul className={`lg:block ${mobileMenuOpen ? "block" : "hidden"}`}>
+        <ul>
           <li className="mb-2">
             <Link
               to="/seller/products"
@@ -92,17 +99,21 @@ function Layout() {
       </div>
 
       {/* Main Right Content */}
-      <div className="flex-1 pt-1 pb-4 lg:ml-64 xl:ml-[21rem] xl:mr-5">
+      <div className="flex-1 pt-1 pb-4 mx-3 lg:ml-64 xl:ml-[21rem] xl:mr-5">
         {/* Header */}
         <div className="container border my-4 mx-auto p-3 bg-white shadow-lg shadow-fuchsia-200 rounded-md">
           <div className="flex flex-row justify-between items-center">
             <div>
-              <h2 className="text-xl font-semibold p-2">{capitalize(activeTab)}</h2>
+              <button className="lg:hidden text-2xl mr-3" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                <i className="fa fa-bars text-black"></i>
+              </button>
+              <h2 className="text-xl font-semibold p-2 inline-block">{capitalize(activeTab)}</h2>
             </div>
             <div
               className="flex items-center rounded-lg p-2 hover:bg-gray-200 hover:cursor-pointer"
               onMouseEnter={() => setIsProfileDropdown(true)}
               onMouseLeave={() => setIsProfileDropdown(false)}
+              onClick={() => setIsProfileDropdown(!isProfileDropdown)}
             >
               <img
                 src="https://via.placeholder.com/100x100"
@@ -116,12 +127,12 @@ function Layout() {
                 <div className="absolute drop-shadow-lg bg-white py-2 px-6 text-lg rounded-lg top-[5.3rem] right-auto">
                   <ul>
                     <li className="border-b">
-                      <Link to="/seller/profile" className="py-2 px-4 hover:text-fuchsia-500">
+                      <Link to="/seller/profile" className="py-2 px-4 hover:text-fuchsia-500 text-nowrap">
                         <i className="fa fa-user"></i> Profile
                       </Link>
                     </li>
                     <li>
-                      <button onClick={logoutUser} className="py-2 px-4 hover:text-fuchsia-500">
+                      <button onClick={logoutUser} className="py-2 px-4 hover:text-fuchsia-500 text-nowrap">
                         <i className="fa fa-power-off"></i> Logout
                       </button>
                     </li>

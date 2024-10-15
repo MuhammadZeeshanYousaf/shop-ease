@@ -26,7 +26,7 @@ function DeleteProduct() {
   return (
     <>
       <Modal isOpen hideCloseBtn onClose={() => navigate("/seller/products")} title="Are you sure to delete this product?">
-        <div className="flex justify-end items-end gap-5 mt-10">
+        <div className="flex justify-end items-end gap-3 mt-10 mr-3">
           <button onClick={onConfirmDelete} className="btn bg-rose-500 hover:bg-rose-600">
             Delete
           </button>

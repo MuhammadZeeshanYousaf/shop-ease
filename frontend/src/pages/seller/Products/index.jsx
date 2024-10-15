@@ -47,7 +47,7 @@ const Products = () => {
         <thead>
           <tr className="bg-gray-200 text-left">
             <th className="py-3 px-6 font-semibold text-gray-600">Image</th>
-            <th className="py-3 px-6 font-semibold text-gray-600">Product Name</th>
+            <th className="py-3 px-6 font-semibold text-gray-600">Name</th>
             <th className="py-3 px-6 font-semibold text-gray-600">Price</th>
             <th className="py-3 px-6 font-semibold text-gray-600">Actions</th>
           </tr>
@@ -69,14 +69,14 @@ const Products = () => {
                   <Link
                     to={`${product._id}/edit`}
                     onClick={e => e.stopPropagation()}
-                    className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-md mr-2 transition-colors duration-200"
+                    className="text-white bg-blue-500 hover:bg-blue-600 px-4 py-1 rounded-md mr-2 transition-colors duration-200 text-nowrap"
                   >
                     <i className="fa fa-pencil"></i> Edit
                   </Link>
                   <Link
                     to={`${product._id}/delete`}
                     onClick={e => e.stopPropagation()}
-                    className="text-white bg-red-500 hover:bg-red-600 px-4 py-1 rounded-md transition-colors duration-200"
+                    className="text-white bg-red-500 hover:bg-red-600 px-4 py-1 rounded-md transition-colors duration-200 text-nowrap mt-2 lg:mt-0"
                   >
                     <i className="fa fa-trash"></i> Delete
                   </Link>
