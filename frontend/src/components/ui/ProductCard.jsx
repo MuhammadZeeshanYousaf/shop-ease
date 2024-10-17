@@ -3,14 +3,32 @@ import { formatCurrency } from "../../utils/helpers";
 import { addToCart, decrementFromCart } from "../../store/cartSlice";
 import QuantityChip from "./QuantityChip";
 import { useLayoutEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product }) => {
   const cart = useSelector(state => state.cart.items);
   const [cartProduct, setCartProduct] = useState(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  // Get current search params
+  const currentPath = location.pathname;
+  const searchParams = new URLSearchParams(location.search);
+
+  const addQueryParam = (key, value) => {
+    // Add or update the query param
+    searchParams.set(key, value);
+
+    // Navigate to the same path with updated query params
+    navigate({
+      pathname: currentPath,
+      search: `?${searchParams.toString()}`, // Adds query params to the current path
+    });
+  };
 
   const handleAddToCart = id => () => {
     dispatch(addToCart(id));
+    addQueryParam("cart", "open");
   };
 
   useLayoutEffect(() => {
@@ -22,7 +40,11 @@ const ProductCard = ({ product }) => {
   return (
     <div key={product._id} className="max-w-sm bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden">
       {/* Product Image */}
-      <img className="w-full h-48 object-cover" src={product.image || "https://via.placeholder.com/300x200"} alt="Product Image" />
+      <img
+        className="w-full h-48 object-cover"
+        src={product.image || "https://via.placeholder.com/300x200"}
+        alt="Product Image"
+      />
       {/* Card Content */}
       <div className="p-5">
         {/* Product Name */}

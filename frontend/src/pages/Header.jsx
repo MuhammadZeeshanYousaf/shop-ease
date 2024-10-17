@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/images/logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 import toast from "react-hot-toast";
@@ -16,7 +16,21 @@ const Header = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoginDropdownOpen, setIsLoginDropdownOpen] = useState(false);
+  const location = useLocation();
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // Get current path
+  const currentPath = location.pathname;
+  const searchParams = new URLSearchParams(location.search);
+
+  const removeQueryParam = key => {
+    searchParams.delete(key);
+    // Navigate to the same path with updated query params
+    navigate({
+      pathname: currentPath,
+      search: `?${searchParams.toString()}`, // Removes the key from the query string
+    });
+  };
 
   const handleSearch = () => {
     console.log("Searching for:", searchTerm);
@@ -26,6 +40,16 @@ const Header = () => {
     setIsCartOpen(false);
     navigate("/checkout");
   };
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const cartQuery = searchParams.get("cart");
+    cartQuery === "open" && setIsCartOpen(true);
+  }, [location]);
+
+  useEffect(() => {
+    if (!isCartOpen) removeQueryParam("cart");
+  }, [isCartOpen]);
 
   const logoutUser = () => {
     if (user) {
