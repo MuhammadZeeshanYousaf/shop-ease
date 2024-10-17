@@ -6,7 +6,7 @@ const router = express.Router();
 
 // authenticated routes
 router.use(verifyToken);
-router.use(authorize("customer"));
+router.use(authorize(["customer", "seller"]));
 
 router.get("/", getOrders);
 router.post("/", createOrder);

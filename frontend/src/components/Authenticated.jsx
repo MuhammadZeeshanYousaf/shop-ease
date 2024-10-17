@@ -7,14 +7,14 @@ const Authenticated = ({ type }) => {
   const location = useLocation();
   const redirectPath = "/login/" + (location.pathname.includes("seller") ? "seller" : "customer");
 
-  console.log("Authenticated component")
+  console.log("Authenticated component");
 
   if (currentUser()) {
     const user = currentUser();
-    return user.role !== type ? (
-      <ErrorPage code={401} message="You are not authorized to access this page!" />
-    ) : (
+    return type === "each" || user.role === type ? (
       <Outlet />
+    ) : (
+      <ErrorPage code={401} message="You are not authorized to access this page!" />
     );
   } else return <Navigate to={redirectPath} />;
 };

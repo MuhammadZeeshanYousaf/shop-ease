@@ -23,7 +23,9 @@ function App() {
               {/* User section layout */}
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
-                <Route path="checkout" element={<Checkout />} />
+                <Route path="checkout" element={<Authenticated type="each" />}>
+                  <Route index element={<Checkout />} />
+                </Route>
                 <Route path="login/:role" element={<Login />} />
                 <Route path="register/:role" element={<Register />} />
               </Route>

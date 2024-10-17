@@ -16,7 +16,7 @@ export function verifyToken(req, res, next) {
 export function authorize(role) {
   return (req, res, next) => {
     if (!req.user) throw new Error("Authorization must be called after token verification!");
-    if (req.user?.role === role) {
+    if (role.includes(req.user?.role)) {
       next();
     } else {
       res.status(401).json({ ok: false, message: "Unauthorized" });
