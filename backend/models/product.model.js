@@ -20,6 +20,10 @@ const productSchema = new Schema(
       ref: "User",
       required: true,
     },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true, // createdAt, updatedAt
@@ -27,8 +31,8 @@ const productSchema = new Schema(
 );
 
 // Post middleware for the update operation
-productSchema.post("findOneAndUpdate", (doc) => deleteByUrl(doc.image)) // doc object must be older document
-productSchema.post("findByIdAndDelete", (doc) => deleteByUrl(doc.image))
+productSchema.post("findOneAndUpdate", doc => deleteByUrl(doc.image)); // doc object must be older document
+productSchema.post("findByIdAndDelete", doc => deleteByUrl(doc.image));
 
 const Product = model("Product", productSchema);
 

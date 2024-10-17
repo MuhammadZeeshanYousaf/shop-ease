@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import _ from "lodash";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -7,8 +8,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import { connectDB } from "./config/db.js";
-import productRoutes from "./routes/product.route.js";
 import authRoutes from "./routes/auth.route.js";
+import productRoutes from "./routes/product.route.js";
+import orderRoutes from "./routes/order.route.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -30,6 +32,7 @@ app.options("*", cors(corsOptions)); // This responds to OPTIONS requests
 app.use("/api", authRoutes);
 // Protected routes
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));

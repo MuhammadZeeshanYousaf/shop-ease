@@ -6,6 +6,7 @@ import CreateProduct from "./Create";
 import EditProduct from "./Edit";
 import ViewProduct from "./View";
 import DeleteProduct from "./Delete";
+import { formatCurrency } from "../../../utils/helpers";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -64,7 +65,7 @@ const Products = () => {
                   <img src={product.image || "https://via.placeholder.com/80x80"} alt="product image" width={80} className="rounded" />
                 </td>
                 <td className="py-4 px-6">{product.name}</td>
-                <td className="py-4 px-6">{product.price}</td>
+                <td className="py-4 px-6">{formatCurrency(product.price)}</td>
                 <td className="py-4 px-6">
                   <Link
                     to={`${product._id}/edit`}
