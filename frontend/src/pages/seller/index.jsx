@@ -14,7 +14,7 @@ function SellerPages() {
       <Route path="/*" element={<Layout />}>
         <Route path="profile" element={<Profile />} />
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="orders" element={<Orders />} />
+        <Route path="orders/*" element={<Orders />} />
         <Route path="products/*" element={<Products />} />
         {/* <Route path="products/create" element={<CreateProduct />} /> */}
         <Route path="customers" element={<Customers />} />

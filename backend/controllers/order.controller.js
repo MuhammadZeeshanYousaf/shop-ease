@@ -7,6 +7,7 @@ import { parsePageQuery } from "./helpers/general.helper.js";
 export const getSellerOrders = async (req, res) => {
   try {
     const sellerId = req.user.id; // Assuming the seller's ID comes from req.user (e.g., JWT)
+    const { status } = req.query; // Get status filter from query string (optional)
 
     // Step 1: Fetch products owned by the seller
     const sellerProducts = await Product.find({ user: sellerId }).select("_id");
@@ -14,8 +15,12 @@ export const getSellerOrders = async (req, res) => {
     // Extract product IDs
     const productIds = sellerProducts.map(product => product._id);
 
-    // Step 2: Fetch orders that contain the seller's products
-    const orders = await Order.find({ "products.product": { $in: productIds } })
+    // Step 2: Build the filter query
+    let filter = { "products.product": { $in: productIds } };
+    if (status) filter.status = status;
+
+    // Step 3: Fetch orders that match the filter
+    const orders = await Order.find(filter)
       .populate({
         path: "products.product", // Populate the product field inside the products array
         select: "name price user", // Select relevant fields from the product

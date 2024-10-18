@@ -44,13 +44,13 @@ const Products = () => {
       <Link to="/seller/products/create" className="btn mb-5">
         <i className="fa fa-plus"></i> Add Product
       </Link>
-      <table className="min-w-full bg-white">
+      <table className="min-w-full bg-white border">
         <thead>
           <tr className="bg-gray-200 text-left">
-            <th className="py-3 px-6 font-semibold text-gray-600">Image</th>
-            <th className="py-3 px-6 font-semibold text-gray-600">Name</th>
-            <th className="py-3 px-6 font-semibold text-gray-600">Price</th>
-            <th className="py-3 px-6 font-semibold text-gray-600">Actions</th>
+            <th className="py-3 px-6 font-semibold text-gray-700">Image</th>
+            <th className="py-3 px-6 font-semibold text-gray-700">Name</th>
+            <th className="py-3 px-6 font-semibold text-gray-700">Price</th>
+            <th className="py-3 px-6 font-semibold text-gray-700">Actions</th>
           </tr>
         </thead>
         <tbody>
