@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema(
 
 // Compound index on both email and role to ensure uniqueness for their combination
 userSchema.index({ email: 1, role: 1 }, { unique: true });
+// alias document attribute accessible as name
+userSchema.virtual('name').get(function () {
+  return `${this.firstName} ${this.lastName}`;
+});
+
 
 const User = mongoose.model("User", userSchema);
 

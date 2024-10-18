@@ -1,12 +1,77 @@
 import mongoose from "mongoose";
 import Order from "../models/order.model.js";
+import Product from "../models/product.model.js";
 import { parsePageQuery } from "./helpers/general.helper.js";
+
+// Fetch orders for products owned by a specific seller
+export const getSellerOrders = async (req, res) => {
+  try {
+    const sellerId = req.user.id; // Assuming the seller's ID comes from req.user (e.g., JWT)
+
+    // Step 1: Fetch products owned by the seller
+    const sellerProducts = await Product.find({ user: sellerId }).select("_id");
+
+    // Extract product IDs
+    const productIds = sellerProducts.map(product => product._id);
+
+    // Step 2: Fetch orders that contain the seller's products
+    const orders = await Order.find({ "products.product": { $in: productIds } })
+      .populate({
+        path: "products.product", // Populate the product field inside the products array
+        select: "name price user", // Select relevant fields from the product
+        // populate: { path: "user", select: "name email" } // Optionally populate the product's seller (user)
+      })
+      .populate("user", "firstName lastName email") // Populate buyer's info (user field in order)
+      .exec();
+
+    res.status(200).json({
+      ok: true,
+      data: orders,
+    });
+  } catch (error) {
+    console.error("Error fetching seller orders:", error.message);
+    res.status(500).json({
+      ok: false,
+      message: "Server Error",
+    });
+  }
+};
+
+// Update order status API
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params; // Get order id from request parameters
+    const { status } = req.body; // Get new status from request body
+
+    // Validate status (optional but recommended)
+    const validStatuses = ["pending", "confirmed", "shipped", "delivered", "canceled"];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ ok: false, message: "Invalid status value" });
+    }
+
+    // Find and update the order's status
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true } // Return the updated order
+    );
+
+    if (!updatedOrder) {
+      return res.status(404).json({ ok: false, message: "Order not found" });
+    }
+
+    return res.status(200).json({ ok: true, message: "Order status updated", data: updatedOrder });
+  } catch (error) {
+    console.error("Error updating order status:", error.message);
+    return res.status(500).json({ ok: false, message: "Server Error" });
+  }
+};
 
 // Get orders for a specific user with pagination and sorting
 export const getOrders = async (req, res) => {
   let sort = "desc",
     sortBy = "createdAt";
-  
+
   // Handling query parameters for sorting
   if (["asc", "desc"].includes(req.query.sort)) sort = req.query.sort;
   if (["createdAt", "updatedAt"].includes(req.query.sortBy)) sortBy = req.query.sortBy;
@@ -19,7 +84,7 @@ export const getOrders = async (req, res) => {
       .sort({ [sortBy]: sort })
       .skip(skip)
       .limit(limit)
-      .populate("products.product");  // Optional: Populates product details
+      .populate("products.product"); // Optional: Populates product details
 
     const totalOrders = await Order.countDocuments({ user: req.user.id });
     const totalPages = Math.ceil(totalOrders / limit);

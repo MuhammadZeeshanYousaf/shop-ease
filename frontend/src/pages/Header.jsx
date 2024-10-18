@@ -127,7 +127,7 @@ const Header = () => {
                       />
                       <small className="text-slate-200 ml-2">{user.role}</small>
                     </div>
-                    <ul>
+                    <ul className="text-start">
                       {user.role === "seller" && (
                         <li>
                           <Link to="seller/dashboard" className="py-2 hover:text-fuchsia-500">
@@ -157,7 +157,7 @@ const Header = () => {
                 &ensp;&ensp;Login&ensp;&ensp;
                 {isLoginDropdownOpen && (
                   <div className="absolute bg-gray-800 text-white py-2 px-4 rounded-lg top-20 right-auto">
-                    <ul>
+                    <ul className="text-start">
                       <li>
                         <Link to="/login/customer" className="py-2 hover:text-fuchsia-500">
                           <i className="fa fa-user"></i> Customer
